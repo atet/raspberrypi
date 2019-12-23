@@ -6,8 +6,8 @@
 
 * Estimated time to completion: 30 minutes.
 * This quick introduction to Raspberry Pi is meant to cover only the absolute necessary material to get you up and running in a minimal amount of time.
-* You are here because **you want to learn IT skills while experiencing a realistic use case for using Raspberry Pi** single board computers (SBC).
-* We will be using <a href="https://en.wikipedia.org/wiki/Bash_(Unix_shell)" target="_blank">Bash Command Line Interface (CLI)</a> to perform basic operations; advanced material is not covered here.
+* You are here because **you want to experience a realistic use case for using single board computers (SBC) while learning fundamental IT skills**.
+* We will be using a Raspberry Pi Zero W and Bash to perform basic operations; advanced material is not covered here.
 
 --------------------------------------------------------------------------------------------------
 
@@ -26,7 +26,6 @@
 
 ### Supplemental
 
-* [Using Command Line Interface](#using-command-line-interface)
 * [Why Raspberry Pi?](#why-raspberry-pi)
 * [Other Resources](#other-resources)
 * [Troubleshooting](#troubleshooting)
@@ -39,25 +38,28 @@
 ### Software
 
 * This tutorial was developed with Bash on Microsoft Windows 10 with Windows Subsystem for Linux (WSL) using Ubuntu 18.04 LTS
+   * WSL is a fully supported Microsoft product for Windows 10, learn how to install it here: [https://docs.microsoft.com/en-us/windows/wsl/install-win10](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
 * If you are using MacOS, [your Terminal program is Bash](https://en.wikipedia.org/wiki/Terminal_(macOS))
-* Most Linux distributions use or can use Bash
+* Most Linux distributions use or can use Bash; I recommend Ubuntu 18.04 LTS
 
 ### Hardware
 
-[![.img/step00a.png](.img/step00a.png)](#nolink)
+> [![.img/step00a.png](.img/step00a.png)](#nolink)
+> 
+> Raspberry Pi Zero W, a single board computer (SBC)
 
-* This tutorial **requires the Raspberry Pi Zero W** ("wireless") which can be purchased from as little at $5-10 (computer only), additionally need:
-   * 5V microUSB phone charger
+* This tutorial **requires the Raspberry Pi Zero W** ("wireless") which can be purchased from as little at $5-10 (computer only), you will also need:
+   * Cell phone charger (5V) with micro USB
    * MicroSD card (≥8 GB)
 
 ### WiFi Network
 
 **The Pi Zero W is WiFi ready but requires very specific WiFi settings**
 
-1. You must be able to connect a new wireless device to your WiFi network with only the network name (a.k.a. SSID) and network password
-   * Some networks may require additional registration for new devices, like a school or public WiFi
+1. You must be able to connect a new wireless device to your WiFi network using only the network name (a.k.a. SSID) and network password
+   * Some networks may require additional registration for new devices, like a school or public hotspot
    * The network can be hidden
-2. The wireless network must have disabled [**"wireless isolation"** (a.k.a AP isolation, station isolation, or client isolation)](https://www.howtogeek.com/179089/lock-down-your-wi-fi-network-with-your-routers-wireless-isolation-option/)
+2. The wireless network must have disabled [**"wireless isolation"** (a.k.a. AP isolation, station isolation, or client isolation)](https://www.howtogeek.com/179089/lock-down-your-wi-fi-network-with-your-routers-wireless-isolation-option/)
 
 [Back to Top](#table-of-contents)
 
@@ -65,13 +67,15 @@
 
 ## 1. _Game_ Plan
 
-* Let's do something fun and setup a [Craft (free, open-source Minecraft clone)](https://www.michaelfogleman.com/projects/craft/) server to host multiple players at the same time
-* Several different skills are introduced in this mini project:
+* Let's do something fun and setup a Craft<sup>[[1]](#acknowledgments)</sup> server to host multiple players at the same time
+* Several different skills are introduced in this short 30-minute project:
    1. Basic IT: Formatting disks and installing operating systems
    2. Networking: Local area networking and secure shell access
    3. System Administration: Command line interface, building from source code, and running a server
 
-[![.img/step01a.png](.img/step01a.png)](#nolink)
+> [![.img/step01a.png](.img/step01a.png)](#nolink)
+> 
+> Messing around on Craft in single player mode
 
 [Back to Top](#table-of-contents)
 
@@ -82,7 +86,8 @@
 ### 2.1. Download Operating System: Raspbian Linux
 
 * We will use a command line interface (CLI)-only Linux operating system
-* There is no graphical user interface (GUI) like Microsoft Windows has; your interaction with the Raspberry Pi will be completely through text commands
+   * There is no graphical user interface (GUI) like Microsoft Windows
+   * Your interaction with the Raspberry Pi will be completely through text commands from a different computer
 * Download the latest Raspbian **Lite** image from: [https://www.raspberrypi.org/downloads/raspbian/](https://www.raspberrypi.org/downloads/raspbian/)
 
 [![.img/step02a.png](.img/step02a.png)](#nolink)
@@ -94,7 +99,7 @@
 1. Clear everything off the SD card; delete all partitions
    * Windows: Use `diskpart` or Disk Management
 2. Reformat the card
-   * Windows `diskpart`: Deleting partitions here does not reformat the SD card
+   * Windows `diskpart`: Deleting partitions here **does not reformat** the SD card
    * Windows Disk Management: Creating a new simple disk here will also reformat the SD card
 3. Burn the Raspbian image onto the formatted micro SD card
    * I used Rufus Portable v3.8: [https://rufus.ie/](https://rufus.ie/)
@@ -115,7 +120,7 @@
 [![.img/step02d.png](.img/step02d.png)](#nolink)
 
 5. `wpa_supplicant.conf` settings
-   * Open `wpa_supplicant.conf` with Notepad
+   * Open `wpa_supplicant.conf` with Notepad (right-click → Open with → Choose another app → Notepad)
    * Copy and paste the following, changing `<NETWORK NAME>` and `<NETWORK PASSWORD>` to match your network's and save
       * If your WiFi network is hidden, you must use the line `scan_ssid=1`
 
@@ -149,7 +154,7 @@ network={
 
 ### 3.1. Determining your headless Raspberry Pi's IP address
 
-**This may be tricky depending on your unique situation; I will describe three scenarios in which you can find this information**
+**This may be tricky depending on your unique situation; I will describe three scenarios**
 
 1. You have administrative access to your local network's router
    * Log into the router and determine the IP address that corresponds to the `raspberrypi` hostname (default name configured for your Raspberry Pi Zero W)
@@ -159,13 +164,14 @@ network={
 
    [![.img/step03a.png](.img/step03a.png)](#nolink)
 
+   * Connect a USB keyboard and HDMI monitor to the Pi using the adapters
    * Login as username `pi` and password `raspberry`
    * Execute `ifconfig` and determine Pi's IP address
 
    ```
    $ ifconfig
 
-   <EXAMPLE OUTPUT OF PI's ifconfig>
+   <EXAMPLE OUTPUT OF IFCONFIG>
    ```
 
 3. You **do not** have access to your network's router or adapters
@@ -174,16 +180,15 @@ network={
 
 ### 3.2. Remote connection to Raspberry Pi
 
-**If you need an intro to Bash first, please see [Using Command Line Interface](#using-command-line-interface)**
-
-* Once the green LED remains solid, the Pi should be ready for remote connection
 * We will use Bash secure shell (SSH) through the WSL command line interface
-* The default username is `pi` and password is `raspberry`
+* SSH as username `pi` and password `raspberry`
 
 ```
 $ ssh pi@<IP ADDRESS>
 
-<SHOW EXAMPLE OF LOGIN MOTD>
+<ENTER PASSWORD>
+
+<LOGIN MESSAGE OF THE DAY>
 ```
 
 **If you successfully log in, CONGRATS! all the hard work is now done**
@@ -195,15 +200,16 @@ $ ssh pi@<IP ADDRESS>
 ## 4. Setup
 
 1. After logging in, we need to make a change to a location where the Pi will look for updates
-   * Uncomment (remove '#' in front of): `deb-src http://raspbian...`
-   * Press `CTRL+O` then `ENTER` to save
-   * Press `CTRL+X` to exit
 
 ```
 $ sudo nano /etc/apt/sources.list
 ```
 
-2. Next, we need to update everything on the Pi and install a couple new dependencies (this will take 10+ mins., coffee break):
+* Uncomment (remove '#' in front of): `deb-src http://raspbian...`
+   * Press `CTRL+O` then `ENTER` to save
+   * Press `CTRL+X` to exit
+
+2. Next, we need to update everything on the Pi and install a couple new dependencies (this will take 10+ mins., time for coffee break):
 
 ```
 $ sudo apt-get update && \
@@ -221,12 +227,14 @@ $ sudo apt-get update && \
 
 1. Download the files for running a Craft server from GitHub (~15 MB)
 
+```
 $ cd ~ && \
   git clone https://github.com/fogleman/Craft.git && \
   cd ~/Craft && \
   cmake .
+```
 
-2. If there are no obvious errors, we can build the program to run on the specific Raspberry Pi Zero W hardware (this will take ~10 mins., coffee break #2)
+2. We can now build the Craft program to run on the specific Raspberry Pi Zero W hardware (this will take ~10 mins., time for coffee break #2)
 
 ```
 $ make && \
@@ -235,14 +243,13 @@ $ make && \
 
 3. Start server
    * The server hosts a persistent, shared world for users (clients) to connect to and play
-   * Remember the IP address for the Pi, that is the address that clients will connect to
-   * Once you run the line below, the server will display log output as events happen in the game world (players connecting, logging out, etc.)
-   * You can stop the server by pressing `CTRL+C`
+   * Remember the IP address for the Pi, this IP is the address that clients will connect to within your local area network (LAN)
+   * Once you run the line below, the server display any output as events happen in the game world (players connecting, logging out, etc.)
+      * You can stop the server by pressing `CTRL+C`
 
 ```
 $ python server.py
 ```
-
 
 [Back to Top](#table-of-contents)
 
@@ -258,7 +265,7 @@ $ python server.py
 >
 > You can play on most game servers anonymously. **However, without registering you will not be able to make changes in most areas of the world**. After you are registered, game server admins can grant you various types of permissions."
 
-* After you register and verify you email address, log back into https://craft.michaelfogleman.com/ and make an Identity Token, it should look like this:
+* After you register and verify your email address, log back into https://craft.michaelfogleman.com/ and make an Identity Token, it should look like this:
 
 ```
 /identity <USERNAME> 0123456789abcdef0123456789abcdef
@@ -272,18 +279,16 @@ $ python server.py
 ### 6.2. Download Craft client
 
 * Download the Craft client for Windows or MacOS here: https://www.michaelfogleman.com/projects/craft/
-* This is a "portable" program; nothing needs to be installed, just extract the ZIP file
+   * This is a "portable" program; nothing needs to be installed, just extract the ZIP file
 * Run `craft.exe`
 * Once the game starts, press "T" and CTRL+V to paste in your Identity Token and press ENTER
-* Press "T" and enter `/online <SERVER IP>` to connect to your server
+* Press "T" and enter `/online <SERVER IP>` to connect to your Raspberry Pi Zero Craft server
    * Once on the server, you should automatically be connected as your account
    * If it says you are a "guest", you must re-login: `/login <USERNAME>`
 
 [![.img/step06b.png](.img/step06b.png)](#nolink)
 
 ### 6.3 Playing Craft
-
-* Controls are as follows:
 
 Button | Action
 --- | ---
@@ -303,139 +308,16 @@ More controls | https://github.com/fogleman/Craft#controls
 
 ## 7. Next Steps
 
+**We touched on a bunch of different IT tasks here; learning to be a self-sufficient "Helpdesk" just takes a lot of experimenting and DIY projects like this**
+
 [![.img/step07a.png](.img/step07a.png)](#nolink)
 
-* Have other people join in at you home network!
+* Have other people join in at your home network!
+   * What we've setup here, only computers within your local area network (LAN) can connect to your server
 * Learn how to make cloud instances and share your server to the world
-   * WARNING: You should learn how to "harden" your server security first before exposing your resources to the general public: [https://www.upguard.com/blog/10-essential-steps-for-configuring-a-new-server](https://www.upguard.com/blog/10-essential-steps-for-configuring-a-new-server)
+   * WARNING: You should "harden" your server security first before exposing any of your servers to the general public: [https://www.upguard.com/blog/10-essential-steps-for-configuring-a-new-server](https://www.upguard.com/blog/10-essential-steps-for-configuring-a-new-server)
 
-**We touched on a bunch of basic to advanced IT tasks here; learn**
-
-[Back to Top](#table-of-contents)
-
---------------------------------------------------------------------------------------------------
-
-## Using Command Line Interface
-
-### Windows 10
-
-* Windows Subsystem for Linux (WSL) is a fully supported Microsoft product for Windows 10, learn how to install it here: [https://docs.microsoft.com/en-us/windows/wsl/install-win10](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
-* Please choose Ubuntu 18.04 LTS as the distribution you use with WSL
-* WSL is only available for Windows 10
-
-### MacOS
-
-* You do not need to install anything, [your Terminal program is Bash](https://en.wikipedia.org/wiki/Terminal_(macOS))
-
-### Linux
-
-* I recommend using Ubuntu 18.04 LTS
-
-### What is Bash?
-
-* Bash is a command line interface (CLI) that allows you to use your operating system purely by text commands 
-   * This is a huge benefit over clicking buttons in a graphical user interface **especially if you have a ton of repetitive and routine tasks**
-* If you're a Windows user like I am, _unlike DOS Command Prompt that is tied to Microsoft_, Windows Subsystem for Linux finally allows some cross-compatibility with Linux and MacOS
-
-### WARNING: CLI is very powerful
-
-* With great power comes great responsibility; be vigilant of code you run so accidents don't happen
-* If this is your first experience with using a command line interface, don't be intimidated, this is worth learning
-
-### Welcome to CLI
-
-* Before we dive into regular expressions, let's go over some basic commands to get around in Bash
-* When you first start your command line interface (CLI), you'll typically be greeted with something similar to this:
-
-```
-atet:LAPTOP:~$ _
-```
-* For the sake of this tutorial, type out any commands you see after the `$` in the examples below
-
-### Navigation
-
-* If you're accustomed to using a graphical user interface (GUI) file explorer, just continue to think of your files and folders (a.k.a. "directories") in a tree-like structure
-
-[![.img/uclia.png](.img/uclia.png)](#nolink)
-
-* If you execute the command `pwd` ("print working directory"), you'll see where you are currently in your file system
-
-```
-atet@LAPTOP:~$ pwd
-/home/atet
-```
-
-* We can see what files are in your current working directory by executing `ls` ("list")
-
-```
-atet@LAPTOP:~$ ls
-book.txt  new  song.mp3
-```
-
-* If you need more information about your files, you can add the flag `-l` to see more detail
-
-```
-atet@LAPTOP:~$ ls -l
-total 0
--rw-rw-rw- 1 mba mba    0 Dec 21 18:39 book.txt
-drwxrwxrwx 1 mba mba 4096 Dec 21 18:42 new
--rw-rw-rw- 1 mba mba    0 Dec 21 18:39 song.mp3
-```
-
-* A lot of information, but in this example we see that the file `new` is actually a directory (look all the way to the left and you see the `d`)
-* If you have directories you want to navigate in and out of, you can use `cd <DIRECTORY NAME>` ("change directory") to go in and `cd ..` to go out
-
-```
-atet@LAPTOP:~$ cd new
-atet@LAPTOP:~/new$ cd ..
-atet@LAPTOP:~$
-```
-
-### File Management
-
-* We only need to know four commands for file management this tutorial
-* To make a new directory, use `mkdir <NEW NAME>` ("make directory")
-
-```
-atet@LAPTOP:~$ mkdir folder
-atet@LAPTOP:~$ cd folder
-atet@LAPTOP:~/folder$
-```
-
-* We will download an example files from my GitHub to work on, let's download one now with the program `wget`
-
-```
-atet@LAPTOP:~/folder$ wget https://raw.githubusercontent.com/atet/learn/master/regex/data/jane.txt
-
-<A BUNCH OF WGET STATUS TEXT>
-
-atet@LAPTOP:~/folder$ ls
-jane.txt
-```
-
-* This is a short file, so we can peek at **all** the text contents using the program `cat` (don't use `cat` on big files, use `head` or `tail`)
-
-```
-atet@LAPTOP:~/folder$ cat jane.txt
-Andrew_WK_-_Party_Hard.mp4
-Beethoven_-_Fur_Elise.m4a
-Beethoven_-_Symphony_No_6.mp3
-Eddie_Murphy_-_Party_All_the_Time.mp3
-LMFAO_-_Party_Rock_Anthem.mp4
-Miley_Cyrus_-_Party_In_The_USA.mp4
-Rick_Astley_-_Never_Gonna_Give_You_Up.m4a
-```
-
-* Let's **permanently delete** this file for now with `rm` ("remove")
-   * WARNING: There will be no confirmation to delete files nor is there a concept of "recycling bin" here, be very careful with `rm`
-
-```
-atet@LAPTOP:~/folder$ ls
-jane.txt
-atet@LAPTOP:~/folder$ rm jane.txt
-atet@LAPTOP:~/folder$ ls
-atet@LAPTOP:~/folder$ _
-```
+**If you would like to learn more about Bash and command line interface (CLI), please see [Atet's 15 Minute Introduction to Regular Expressions (in Bash)](https://github.com/atet/learn/blob/master/regex/README.md#atet--learn--regex)**
 
 [Back to Top](#table-of-contents)
 
@@ -443,9 +325,9 @@ atet@LAPTOP:~/folder$ _
 
 ## Why Raspberry Pi?
 
-* **_Trust me on this one_**: There's a huge difference in your experience of learning something when the brand has sold 10+ million computers vs. a less-known (cheaper?) alternative that has only thousands of customers
+* **_Trust me on this one_**: There's a huge difference in your learning experience when the brand you're working with has sold 10+ million computers vs. lesser-known alternatives that may be a bit cheaper
 * With a larger userbase, bugs get fixed quicker, there's reliable community and official support, you can expect timely updates, etc.
-* The Raspberry Pi Zero is relatively inexpensive but is not going to host the next Twitter; this brand has other more powerful and more expensive computers if you need the horsepower
+* The Raspberry Pi Zero is amazing for its price point, [but it's not going to play Crysis](https://en.wikipedia.org/wiki/Crysis_(video_game)#Legacy); this brand has other more powerful and more expensive computers if you need the horsepower
 
 > [![.img/wrpa.png](.img/wrpa.png)](#nolink)
 >
@@ -470,8 +352,8 @@ Official Craft Server Installation | [https://github.com/fogleman/Craft#linux-ub
 
 Issue | Solution
 --- | ---
-I dont see the `boot` folder after I burn the OS image to the micro SD card | You needed to have formatted the card (to have a partition) BEFORE burning the Raspbian image to the card
-I reformatted the SD card and the free space is **less** than before | You may be limited due to an existing small partition; erase all partitions before formatting
+I don't see the `boot` folder after I burn the OS image to the micro SD card | You needed to have formatted the card (to have a partition) BEFORE burning the Raspbian image to the card
+I reformatted the SD card and the free space is **less** than before | You may be limited due to multiple existing partitions on your card; erase all partitions before formatting as **one partition**
 I cannot find my Pi's IP address | _Did your Pi successfully connect to your WiFi network?_ You may have to go back and verify `wpa_supplicant.conf` or confirm you can have new devices connect to your network
 
 [Back to Top](#table-of-contents)
@@ -480,7 +362,7 @@ I cannot find my Pi's IP address | _Did your Pi successfully connect to your WiF
 
 ## Acknowledgments
 
-1. newsCorpora.tsv is modified from NewsAggregatorDataset.zip: <a href="http://archive.ics.uci.edu/ml/datasets/News+Aggregator" target="_blank">Dua, D. and Graff, C. (2019). UCI Machine Learning Repository [http://archive.ics.uci.edu/ml]. Irvine, CA: University of California, School of Information and Computer Science.</a>
+1. Craft, the free, open-source Minecraft clone by Michael Fogleman: <a href="https://www.michaelfogleman.com/projects/craft/" target="_blank">https://www.michaelfogleman.com/projects/craft/</a>
 
 [Back to Top](#table-of-contents)
 
