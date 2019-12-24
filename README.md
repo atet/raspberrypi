@@ -345,8 +345,8 @@ More controls | https://github.com/fogleman/Craft#controls
    * What we've setup here, only computers within your local area network (LAN) can connect to your server
 * Learn how to make cloud instances and share your server to the world
    * WARNING: You should "harden" your server security first before exposing any of your servers to the public internet: [https://www.upguard.com/blog/10-essential-steps-for-configuring-a-new-server](https://www.upguard.com/blog/10-essential-steps-for-configuring-a-new-server)
-* Read the official Raspberry Pi starter guide: https://projects.raspberrypi.org/en/pathways/getting-started-with-raspberry-pi
-* Now that you already have the Raspberry Pi, try some other fun projects: https://projects.raspberrypi.org/en/
+* Now that you already have a Raspberry Pi, try some other fun projects: https://projects.raspberrypi.org/en/
+* Trying to go back to sleep at 3AM? Read the official Raspberry Pi starter guide: https://projects.raspberrypi.org/en/pathways/getting-started-with-raspberry-pi
 
 **If you would like to learn more about Bash and command line interface (CLI), please see [Atet's 15 Minute Introduction to Regular Expressions (in Bash)](https://github.com/atet/learn/blob/master/regex/README.md#atet--learn--regex)**
 
