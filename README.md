@@ -4,7 +4,7 @@
 
 # Introduction to Raspberry Pi
 
-* Estimated time to completion: 30 minutes.
+* Estimated time to completion: 15 minutes (not including waiting times for downloads and updates).
 * This quick introduction to Raspberry Pi is meant to cover only the absolute necessary material to get you up and running in a minimal amount of time.
 * You are here because **you want to experience a realistic use case for using single board computers (SBC) while learning fundamental IT skills**.
 * We will be using a Raspberry Pi Zero W and Bash to perform basic operations; advanced material is not covered here.
@@ -68,7 +68,7 @@
 ## 1. _Game_ Plan
 
 * Let's do something fun and setup a Craft<sup>[[1]](#acknowledgments)</sup> server to host multiple players at the same time
-* Several different skills are introduced in this short 30-minute project:
+* Several different skills are introduced in this short project:
    1. Basic IT: Formatting disks and installing operating systems
    2. Networking: Local area networking and secure shell access
    3. System Administration: Command line interface, building from source code, and running a server
