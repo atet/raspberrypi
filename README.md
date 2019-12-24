@@ -51,7 +51,7 @@
 * This tutorial **requires the Raspberry Pi Zero W** ("wireless") which can be purchased from as little at $5-10 (computer only), you will also need:
    * Cell phone charger (5V) with micro USB
    * MicroSD card (≥8 GB)
-   * NOTE: There exists an older model, Raspberry Pi Zero (without the "W"), that does not include the required WiFi functionality for this tutorial
+   * NOTE: There exists an older model, Raspberry Pi Zero (without the "W"), that **does not include WiFi functionality required for this tutorial**
 
 ### WiFi Network
 
@@ -62,7 +62,7 @@
    * The network can be hidden
 2. The wireless network must have disabled [**"wireless isolation"** (a.k.a. AP isolation, station isolation, or client isolation)](https://www.howtogeek.com/179089/lock-down-your-wi-fi-network-with-your-routers-wireless-isolation-option/)
    * There is no compromise on this one; if wireless isolation is not disabled on your network, you will not be able to connect to your Pi trhough WiFi
-* NOTE: If your network is open and does not require a password, you should secure your network as soon as possible: [https://lifehacker.com/how-to-make-your-wifi-router-as-secure-as-possible-1827695547](https://lifehacker.com/how-to-make-your-wifi-router-as-secure-as-possible-1827695547)
+* NOTE: If you administer your own open network that does not require a password, **you should secure your network ASAP**: [https://lifehacker.com/how-to-make-your-wifi-router-as-secure-as-possible-1827695547](https://lifehacker.com/how-to-make-your-wifi-router-as-secure-as-possible-1827695547)
 
 [Back to Top](#table-of-contents)
 
@@ -203,7 +203,7 @@ $ ssh pi@<IP ADDRESS>
 <LOGIN MESSAGE OF THE DAY>
 ```
 
-**If you successfully log in, all the hard work is now done**
+**If you successfully log in, all the hard work is done**
 
 [Back to Top](#table-of-contents)
 
@@ -211,7 +211,7 @@ $ ssh pi@<IP ADDRESS>
 
 ## 4. Setup
 
-1. After logging in, we need to make a change to a location where the Pi will look for updates, run
+1. After logging in, we need to add a location where the Pi will look for updates, run
 
 ```
 $ sudo nano /etc/apt/sources.list
@@ -281,7 +281,7 @@ After you are done with this tutorial, you can shut down the server program by p
 >
 > You can play on most game servers anonymously. **However, without registering you will not be able to make changes in most areas of the world**."
 
-* After you register and verify your email address, log back into https://craft.michaelfogleman.com/ and make an Identity Token, it should look like this:
+* After you register and verify your email address, log back into https://craft.michaelfogleman.com/ and make an Identity Token, it should look similar to:
 
 ```
 /identity <USERNAME> 0123456789abcdef0123456789abcdef
@@ -300,10 +300,10 @@ After you are done with this tutorial, you can shut down the server program by p
 
 ### 6.3. Connecting to Craft server
 
-* Once the game starts, press "T" and CTRL+V to paste in your Identity Token and press ENTER
+* Once the game starts, press "T" and CTRL+V to paste in your Identity Token and press ENTER (include the slash "`/`")
 * Press "T" and enter `/online <SERVER IP>` to connect to your Raspberry Pi Zero Craft server
    * Once on the server, you should automatically be connected as your account
-   * If it says you are a "guest", you must re-login: `/login <USERNAME>`
+   * The server may accidentally log you off your username after you connect; if it says you are a "guest", you must re-login: `/login <USERNAME>`
 
 [![.img/step06b.png](.img/step06b.png)](#nolink)
 
@@ -327,7 +327,7 @@ More controls | https://github.com/fogleman/Craft#controls
 
 ### 6.5 Multiplayer vs. single-player
 
-[![.img/step07a.png](.img/step07a.png)](#nolink)
+[![.img/step06c.png](.img/step06c.png)](#nolink)
 
 * You can have a single-player experience in Craft without connecting to a server and have your world saved locally on your computer
 * Other players will not be able to connect to your world in single-player mode
@@ -339,12 +339,14 @@ More controls | https://github.com/fogleman/Craft#controls
 
 ## 7. Next Steps
 
-**We touched on a bunch of different IT tasks here; you're easily on your way to becoming a self-sufficient ["techie"](https://www.merriam-webster.com/dictionary/techie), it just takes a lot of experimenting and DIY projects like this**
+**We touched on a bunch of different IT tasks here; you're easily on your way to becoming a self-sufficient ["techie"](https://www.merriam-webster.com/dictionary/techie), it just takes a lot of experimenting and completing projects like this**
 
 * Have other people join in at your home network!
    * What we've setup here, only computers within your local area network (LAN) can connect to your server
 * Learn how to make cloud instances and share your server to the world
    * WARNING: You should "harden" your server security first before exposing any of your servers to the public internet: [https://www.upguard.com/blog/10-essential-steps-for-configuring-a-new-server](https://www.upguard.com/blog/10-essential-steps-for-configuring-a-new-server)
+* Read the official Raspberry Pi starter guide: https://projects.raspberrypi.org/en/pathways/getting-started-with-raspberry-pi
+* Now that you already have the Raspberry Pi, try some other fun projects: https://projects.raspberrypi.org/en/
 
 **If you would like to learn more about Bash and command line interface (CLI), please see [Atet's 15 Minute Introduction to Regular Expressions (in Bash)](https://github.com/atet/learn/blob/master/regex/README.md#atet--learn--regex)**
 
