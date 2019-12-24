@@ -4,7 +4,7 @@
 
 # Introduction to Raspberry Pi
 
-* Estimated time to completion: 15 minutes (not including waiting times for downloads and updates).
+* **Estimated time to completion: 15 minutes** (excluding waiting times for downloads and updates).
 * This quick introduction to Raspberry Pi is meant to cover only the absolute necessary material to get you up and running in a minimal amount of time.
 * You are here because **you want to experience a realistic use case for using single board computers (SBC) while learning fundamental IT skills**.
 * We will be using a Raspberry Pi Zero W and Bash to perform basic operations; advanced material is not covered here.
