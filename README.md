@@ -295,7 +295,7 @@ $ python server.py
 
 [![.img/step06a.png](.img/step06a.png)](#nolink)
 
-* **Highlight the line and CTRL+C** (pressing the copy to clipboard button didn't work for me to paste in the game)
+* **Highlight the line and `CTRL`+`C`** (pressing the copy to clipboard button didn't work for me to paste in the game)
 * NOTE: You can only see and copy this key once; when you close the window or logout, you will have to make another key
 
 ### 6.2. Download Craft client
@@ -306,8 +306,8 @@ $ python server.py
 
 ### 6.3. Connecting to Craft server
 
-* Once the game starts, press "T" and CTRL+V to paste in your Identity Token and press ENTER (slash "`/`" in front is used to denote system commands)
-* Press "T" and enter `/online <SERVER IP>` to connect to your Raspberry Pi Zero Craft server
+* Once the game starts, press "`T`" and `CTRL`+`V` to paste in your Identity Token and press ENTER (slash "`/`" in front is used to denote system commands)
+* Press "`T`" and enter `/online <SERVER IP>` to connect to your Raspberry Pi Zero Craft server
    * Once on the server, you should automatically be connected as your account
    * The server may accidentally log you off your username after you connect; if it says you are a "guest", you must re-login: `/login <USERNAME>`
 
@@ -322,13 +322,13 @@ Have some fun and build a new world in your own Craft playground:
 Button | Action
 --- | ---
 `W`, `A`, `S`, `D` | Movement
-Left-Mouse | Destroy block
-Right-Mouse | Create block
-Mouse-Wheel | Cycle through block types
-CTRL+Right-Mouse | Create light source
+`Left-Mouse` | Destroy block
+`Right-Mouse` | Create block
+`Mouse-Wheel` | Cycle through block types
+`CTRL`+`Right-Mouse` | Create light source
 `T` | Chat
 `/` | Command: Chat but with `/` added
-ESCAPE | Mouse control back to OS (to close or maximize/minimize Craft window)
+`ESC` | Mouse control back to OS (to close or maximize/minimize Craft window)
 More controls | https://github.com/fogleman/Craft#controls
 
 ### 6.5. Multiplayer vs. single-player
@@ -402,9 +402,10 @@ Official Raspberry Pi Project Ideas | https://projects.raspberrypi.org/en/
 
 Issue | Solution
 --- | ---
-I don't see the `boot` folder after I burn the OS image to the micro SD card | You needed to have formatted the card (to have a partition) BEFORE burning the Raspbian image to the card; repeat steps 1-3 in [2.2. Prepare Micro SD Card](#22-prepare-micro-sd-card)
-I reformatted the SD card and the free space is **less** than before | Multiple partitions may exist on your card from a previous OS burn; erase all partitions before formatting as **one partition**
-I cannot find my Pi's IP address | _Did your Pi actually connect to your WiFi network successfully?_ You may have to go back and verify `wpa_supplicant.conf` or confirm you can connect new devices to your network
+Cannot access micro SD card `boot` drive after OS image burn | Must have formatted the card (to have a partition) **BEFORE** burning the Raspbian image to the card; repeat steps 1-3 in [2.2. Prepare Micro SD Card](#22-prepare-micro-sd-card)
+Reformatted micro SD card's free space is **less** than before | Multiple partitions may exist on card from a previous OS burn; erase all partitions before formatting as **one partition**
+Cannot find Pi's IP address | _Did the Pi actually connect to your WiFi network successfully?_ May have to go back and verify `wpa_supplicant.conf` or confirm you can connect new devices to your network
+Player camera slowly looks up automatically | Bug? I had this issue when the game is maximized to fullscreen or the window was expanded outside the limits of the screen; just play windowed if this happens
 
 [Back to Top](#table-of-contents)
 
