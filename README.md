@@ -58,9 +58,9 @@
 **The Pi Zero W is WiFi ready but requires very specific WiFi settings**
 
 1. You must be able to connect a new wireless device to your WiFi network using only the network name (a.k.a. SSID) and network password
-   * Some networks may require additional registration for new devices, like a school or public hotspot
+   * Some networks may require additional registration for new devices, like a school or public hotspot; consult your IT department about adding your Pi
    * The network can be hidden
-2. The wireless network must have disabled [**"wireless isolation"** (a.k.a. AP isolation, station isolation, or client isolation)](https://www.howtogeek.com/179089/lock-down-your-wi-fi-network-with-your-routers-wireless-isolation-option/)
+2. The wireless network **must have disabled** [**"wireless isolation"** (a.k.a. AP isolation, station isolation, or client isolation)](https://www.howtogeek.com/179089/lock-down-your-wi-fi-network-with-your-routers-wireless-isolation-option/)
    * There is no compromise on this one; if wireless isolation is not disabled on your network, you will not be able to connect to your Pi trhough WiFi
 * NOTE: If you administer your own open network that does not require a password, **you should secure your network ASAP**: [https://lifehacker.com/how-to-make-your-wifi-router-as-secure-as-possible-1827695547](https://lifehacker.com/how-to-make-your-wifi-router-as-secure-as-possible-1827695547)
 
@@ -78,7 +78,7 @@
 
 > [![.img/step01a.png](.img/step01a.png)](#nolink)
 > 
-> Messing around on Craft in single player mode
+> Messing around in Craft on single player mode
 
 [Back to Top](#table-of-contents)
 
@@ -93,6 +93,7 @@
    * Your interaction with the Raspberry Pi will be completely through text commands from a different computer
    * **You do not need to learn CLI right now**, just follow the exact commands here and you will get though this tutorial
 * Download the latest Raspbian **Lite** image from: [https://www.raspberrypi.org/downloads/raspbian/](https://www.raspberrypi.org/downloads/raspbian/)
+   * Extract the ZIP folder once the image is downloaded
 
 [![.img/step02a.png](.img/step02a.png)](#nolink)
 
@@ -127,24 +128,25 @@
 
 6. `wpa_supplicant.conf` settings
    * Open `wpa_supplicant.conf` with Notepad (right-click → Open with → Choose another app → Notepad)
+
+   [![.img/step02e.png](.img/step02e.png)](#nolink)
+
    * Copy and paste the following, changing `<NETWORK NAME>` and `<NETWORK PASSWORD>` to match your network's and save
       * If your WiFi network is hidden, you must use the line `scan_ssid=1`
       * Change the country code as appropriate
 
-```
-ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-update_config=1
-country=US
+   ```
+   ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+   update_config=1
+   country=US
 
-network={
-   ssid="<NETWORK NAME>"
-   scan_ssid=1
-   psk="<NETWORK PASSWORD>"
-   key_mgmt=WPA-PSK
-}
-```
-
-[![.img/step02e.png](.img/step02e.png)](#nolink)
+   network={
+      ssid="<NETWORK NAME>"
+      scan_ssid=1
+      psk="<NETWORK PASSWORD>"
+      key_mgmt=WPA-PSK
+   }
+   ```
 
 ### 2.3. Headless OS installation
 
@@ -153,7 +155,7 @@ network={
 1. The Pi should not be powered on at this time
 2. Insert micro SD card
 3. Plug the micro USB power into the power port and the green LED should start blinking
-4. Wait for ~10 minutes while the Raspbian OS installs, configures itself, and automatically connects to your WiFi network
+4. Coffee Break: This will take ~10 mins while the Raspbian OS installs, configures itself, and automatically connects to your WiFi network
 
 **When the Pi is ready, the green LED should stop blinking and stay on**
 
@@ -208,7 +210,9 @@ network={
 
 ## 4. Setup
 
-1. After logging in, we need to add a location where the Pi will look for updates, run
+### 4.1. Add update source
+
+* After logging in, we need to add a location where the Pi will look for updates, run
 
 ```
 $ sudo nano /etc/apt/sources.list
@@ -218,9 +222,11 @@ $ sudo nano /etc/apt/sources.list
    * Press `CTRL+O` then `ENTER` to save
    * Press `CTRL+X` to exit
 
-2. Next, we need to update everything on the Pi and install a few new dependencies
-   * Copy and paste the entire multi-line block of code after the "`$`" and press ENTER
-   * Coffee break: This will take 10+ mins. and you don't need to babysit this
+### 4.2. Updates
+
+* We need to update everything on the Pi and install a few new programs that the Craft server is dependent on (a.k.a. dependencies)
+* Copy and paste the entire multi-line block of code after the "`$`" and press ENTER
+   * Coffee break #2: This will take 10+ mins. and you don't need to babysit this
 
 ```
 $ sudo apt-get update && \
@@ -236,7 +242,9 @@ $ sudo apt-get update && \
 
 ## 5. Craft Server
 
-1. Download the files for running a Craft server from GitHub (~15 MB)
+### 5.1. Download Craft server
+
+* Download the files for running a Craft server from GitHub (~15 MB)
 
 ```
 $ cd ~ && \
@@ -245,24 +253,25 @@ $ cd ~ && \
   cmake .
 ```
 
-2. We can now build the Craft program to run on the specific Raspberry Pi Zero W hardware
-   * Coffee break #2: This will take ~10 mins. and you don't need to babysit this
+### 5.2. Build Craft program
+
+* We can now build the Craft program to run on the specific Raspberry Pi Zero W hardware
+   * Coffee break #3: This will take ~10 mins. and you don't need to babysit this
 
 ```
 $ make && \
   gcc -std=c99 -O3 -fPIC -shared -o world -I src -I deps/noise deps/noise/noise.c src/world.c
 ```
 
-3. Start server
-   * The server program hosts a persistent, shared world for users (clients) to connect to and play together
-   * Remember the IP address for the Pi, this IP is the address that clients will connect to within your local area network (LAN)
-   * Once you run the line below, the server program will start displaying events as they happen in the game world (players connecting, logging out, etc.)
+### 5.3. Start Craft server
+
+* The server program hosts a persistent, shared world for users (clients) to connect to and play together
+* Remember the IP address for the Pi, this IP is the address that clients will connect to within your local area network (LAN)
+* Once you run the line below, the server program will start displaying events as they happen in the game world (players connecting, logging out, etc.)
 
 ```
 $ python server.py
 ```
-
-After you are done with this tutorial, you can shut down the server program by pressing `CTRL+C` or continue to have the server program run as long as you want to play on it
 
 [Back to Top](#table-of-contents)
 
@@ -272,7 +281,7 @@ After you are done with this tutorial, you can shut down the server program by p
 
 ### 6.1. Registering an account
 
-* Even if we made our own sever here, we need to register an account on the author's website: https://craft.michaelfogleman.com/
+* Even if we made our own sever here, we still need to register an account on the author's website: https://craft.michaelfogleman.com/
 
 > "Why register?
 >
@@ -286,7 +295,7 @@ After you are done with this tutorial, you can shut down the server program by p
 
 [![.img/step06a.png](.img/step06a.png)](#nolink)
 
-* **Highlight the line and CTRL+C** (pressing the copy to clipboard didn't work for me to paste in the game)
+* **Highlight the line and CTRL+C** (pressing the copy to clipboard button didn't work for me to paste in the game)
 * NOTE: You can only see and copy this key once; when you close the window or logout, you will have to make another key
 
 ### 6.2. Download Craft client
@@ -297,14 +306,14 @@ After you are done with this tutorial, you can shut down the server program by p
 
 ### 6.3. Connecting to Craft server
 
-* Once the game starts, press "T" and CTRL+V to paste in your Identity Token and press ENTER (include the slash "`/`")
+* Once the game starts, press "T" and CTRL+V to paste in your Identity Token and press ENTER (slash "`/`" in front is used to denote system commands)
 * Press "T" and enter `/online <SERVER IP>` to connect to your Raspberry Pi Zero Craft server
    * Once on the server, you should automatically be connected as your account
    * The server may accidentally log you off your username after you connect; if it says you are a "guest", you must re-login: `/login <USERNAME>`
 
 [![.img/step06b.png](.img/step06b.png)](#nolink)
 
-### 6.4 Playing Craft
+### 6.4. Playing Craft
 
 **CONGRATS! You're done with the tutorial**
 
@@ -322,13 +331,24 @@ CTRL+Right-Mouse | Create light source
 ESCAPE | Mouse control back to OS (to close or maximize/minimize Craft window)
 More controls | https://github.com/fogleman/Craft#controls
 
-### 6.5 Multiplayer vs. single-player
+### 6.5. Multiplayer vs. single-player
 
 [![.img/step06c.png](.img/step06c.png)](#nolink)
 
 * You can have a single-player experience in Craft without connecting to a server and have your world saved locally on your computer
 * Other players will not be able to connect to your world in single-player mode
 * The only way to have multiplayer in Craft is to connect to a server that is running the Craft server program
+
+### 6.6. Cleanup
+
+**After you are done with this tutorial:**
+
+* You can continue to have the server program run as long as you want to play on it
+* You can shut down the server program by pressing `CTRL+C`, then shut down the Pi by executing:
+
+```
+$ sudo shutdown -h now
+```
 
 [Back to Top](#table-of-contents)
 
