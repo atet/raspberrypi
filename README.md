@@ -165,10 +165,14 @@ network={
 
 ### 3.1. Determining your headless Raspberry Pi's IP address
 
-**This may be tricky depending on your unique situation; I will describe three scenarios**
+**This may be tricky depending on your unique situation; I will describe three scenarios:**
 
 1. You have administrative access to your local network's router
    * Log into the router and determine the IP address that corresponds to the hostname `raspberrypi` (default name configured for your Raspberry Pi Zero W)
+   * Below is an example router administration page to look up the IP addresses associated with connected hostnames
+
+   [![.img/step031a.png](.img/step031a.png)](#nolink)
+
 2. You **do not** have access to your network's router but have USB and HDMI adapters
    * You need an HDMI compatible TV or monitor
    * Adapters for micro USB (Male) to USB-A (Female) and Mini HDMI (Male) to HDMI (Female)
@@ -178,12 +182,10 @@ network={
    * Connect a USB keyboard and HDMI monitor to the Pi using the adapters
    * Login as default username `pi` and password `raspberry`
    * Execute `ifconfig` and determine Pi's IP address
+      * Look under the `wlan0` section
+      * Find the IP address after `inet`
 
-   ```
-   $ ifconfig
-
-   <EXAMPLE OUTPUT OF IFCONFIG>
-   ```
+   [![.img/step03b.png](.img/step03b.png)](#nolink)
 
 3. You **do not** have access to your network's router or adapters
    * You can connect to you Raspberry Pi through USB: [https://www.tomshardware.com/reviews/raspberry-pi-headless-setup-how-to,6028.html](https://www.tomshardware.com/reviews/raspberry-pi-headless-setup-how-to,6028.html)
@@ -193,15 +195,10 @@ network={
 
 * We will use Bash secure shell (SSH) through the WSL command line interface
 * Knowing the Pi's IP address, SSH as default username `pi@<IP ADDRESS>` and password `raspberry`
-   * E.g. `pi@192.168.0.2`
+   * You may get a warning of `The authenticity of host...`, just answer `yes`
+   * Typing the password will be invisible for security
 
-```
-$ ssh pi@<IP ADDRESS>
-
-<ENTER PASSWORD>
-
-<LOGIN MESSAGE OF THE DAY>
-```
+   [![.img/step03c.png](.img/step03c.png)](#nolink)
 
 **If you successfully log in, all the hard work is done**
 
