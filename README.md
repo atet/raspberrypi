@@ -4,10 +4,11 @@
 
 # Introduction to Raspberry Pi
 
-* **Estimated time to completion: 15 minutes** (excluding waiting times for downloads and updates).
-* This quick introduction to Raspberry Pi is meant to cover only the absolute necessary material to get you up and running in a minimal amount of time.
-* You are here because **you want to experience a realistic use case for using single board computers (SBC) while learning fundamental IT skills**.
-* We will be using a Raspberry Pi Zero W and Bash to perform basic operations; advanced material is not covered here.
+**Estimated time to completion: 15 minutes**<br>(excluding waiting times for downloads and updates)
+
+* This introduction to Raspberry Pi only covers what's absolutely necessary to get you up and running
+* You are here because **you want to experience a realistic use case for inexpensive single board computers (SBC) while learning fundamental IT skills**
+* We will be using a Raspberry Pi Zero W and Bash command line interface (CLI)
 
 --------------------------------------------------------------------------------------------------
 
@@ -42,27 +43,27 @@
 * If you are using MacOS, [your Terminal program is Bash](https://en.wikipedia.org/wiki/Terminal_(macOS))
 * Most Linux distributions use or can use Bash; I recommend Ubuntu 18.04 LTS
 
-### Hardware
+### Computer Hardware
 
 > [![.img/step00a.png](.img/step00a.png)](#nolink)
 > 
 > Raspberry Pi Zero W, a single board computer (SBC)
 
-* This tutorial **requires the Raspberry Pi Zero W** ("wireless") which can be purchased from as little at $5-10 (computer only), you will also need:
-   * Cell phone charger (5V) with micro USB
-   * MicroSD card (≥8 GB)
+* This tutorial **requires the ~$10 Raspberry Pi Zero W** ("wireless"), you will also need:
+   1. Cell phone charger (5V) with micro USB cable
+   2. MicroSD card (≥8 GB)
    * NOTE: There exists an older model, Raspberry Pi Zero (without the "W"), that **does not include WiFi functionality required for this tutorial**
+* This tutorial should also work with any computer that can run Linux
 
 ### WiFi Network
 
-**The Pi Zero W is WiFi ready but requires very specific WiFi settings**
+**The Pi Zero W requires very specific WiFi settings**
 
 1. You must be able to connect a new wireless device to your WiFi network using only the network name (a.k.a. SSID) and network password
    * Some networks may require additional registration for new devices, like a school or public hotspot; consult your IT department about adding your Pi
    * The network can be hidden
 2. The wireless network **must have disabled** [**"wireless isolation"** (a.k.a. AP isolation, station isolation, or client isolation)](https://www.howtogeek.com/179089/lock-down-your-wi-fi-network-with-your-routers-wireless-isolation-option/)
    * There is no compromise on this one; if wireless isolation is not disabled on your network, you will not be able to connect to your Pi trhough WiFi
-* NOTE: If you administer your own open network that does not require a password, **you should secure your network ASAP**: [https://lifehacker.com/how-to-make-your-wifi-router-as-secure-as-possible-1827695547](https://lifehacker.com/how-to-make-your-wifi-router-as-secure-as-possible-1827695547)
 
 [Back to Top](#table-of-contents)
 
@@ -86,13 +87,12 @@
 
 ## 2. Installation
 
-### 2.1. Download Operating System: Raspbian Linux
+### 2.1. Download Operating System Image
 
-* We will use a command line interface (CLI)-only Linux operating system
-   * There is no graphical user interface (GUI) like Microsoft Windows
-   * Your interaction with the Raspberry Pi will be completely through text commands from a different computer
-   * **You do not need to learn CLI right now**, just follow the exact commands here and you will get though this tutorial
-* Download the latest Raspbian **Lite** image from: [https://www.raspberrypi.org/downloads/raspbian/](https://www.raspberrypi.org/downloads/raspbian/)
+* We are using **Raspbian Linux Lite**, which is command line interface (CLI) only
+* **You don't need prior CLI experience for this tutorial**
+* Download the latest image from: [https://www.raspberrypi.org/downloads/raspbian/](https://www.raspberrypi.org/downloads/raspbian/)
+   * Make sure you download the "Lite" version
    * Extract the ZIP folder once the image is downloaded
 
 [![.img/step02a.png](.img/step02a.png)](#nolink)
@@ -101,14 +101,14 @@
 
 **This is the only step that can be frustrating and may take a few retries**
 
-1. Clear everything off the SD card; delete all partitions
-   * Windows: Use `diskpart` or Disk Management
+1. Format micro SD card
+   * Windows Disk Management: Press the Windows key and search for "disk management"
 2. Reformat the card
-   * Windows `diskpart`: Deleting partitions here **does not reformat** the SD card
-   * Windows Disk Management: Creating a new simple disk here will also reformat the SD card
+   * Windows: Creating a new simple disk in Disk Management here will also reformat the SD card
+   * (TODO: More details)
 3. Burn the Raspbian image onto the formatted micro SD card
    * I used Rufus Portable v3.8: [https://rufus.ie/](https://rufus.ie/)
-   * If you do not format the SD card **before** this step, you may not be able to read the SD card as the `boot` drive
+   * If you do not format the SD card **before** this step (in case you used a utility other than Disk Management), you may not be able to read the SD card as the `boot` drive
    * When the image burn is complete, just cancel out of Rufus
 
 [![.img/step02b.png](.img/step02b.png)](#nolink)
@@ -150,14 +150,13 @@
 
 ### 2.3. Headless OS installation
 
-**Headless** means that we will not have a monitor or keyboard attached to the Raspberry Pi Zero W and all administration of it will be remotely through command line interface (CLI)
+**Headless** means that we won't attach a monitor or keyboard to the Pi and all communication to it will be through command line interface (CLI) from another computer
 
 1. The Pi should not be powered on at this time
-2. Insert micro SD card
-3. Plug the micro USB power into the power port and the green LED should start blinking
-4. Coffee Break: This will take ~10 mins while the Raspbian OS installs, configures itself, and automatically connects to your WiFi network
-
-**When the Pi is ready, the green LED should stop blinking and stay on**
+2. Insert prepared micro SD card
+3. Plug the micro USB power into the Pi's power port and the green LED should start blinking
+   * Coffee Break: It'll take ~10 mins while the Raspbian OS installs, configures itself, and automatically connects to your WiFi network
+4. When the Pi is ready, the green LED should stop blinking and stay on
 
 [Back to Top](#table-of-contents)
 
@@ -165,40 +164,28 @@
 
 ## 3. Connection
 
-### 3.1. Determining your headless Raspberry Pi's IP address
+### 3.1. Determining the IP address of your headless Raspberry Pi
 
-**This may be tricky depending on your unique situation; I will describe three scenarios:**
+**This may be tricky depending on your unique situation:**
 
-1. You have administrative access to your local network's router
-   * Log into the router and determine the IP address that corresponds to the hostname `raspberrypi` (default name configured for your Raspberry Pi Zero W)
-   * Below is an example router administration page to look up the IP addresses associated with connected hostnames
+1. If you have administrative access to your local network's router:
+   * Log into the router and determine the IP address that corresponds to the hostname `raspberrypi` (default name for your Pi)
+   * Below is an example router administration page to look up the IP addresses associated with connected devices
 
    [![.img/step031a.png](.img/step031a.png)](#nolink)
 
-2. You **do not** have access to your network's router but have USB and HDMI adapters
-   * You need an HDMI compatible TV or monitor
-   * Adapters for micro USB (Male) to USB-A (Female) and Mini HDMI (Male) to HDMI (Female)
+2. If you **do not** have admin access to your network's router, you can try:
+   * Scanning your network for connected IP addresses: https://stackoverflow.com/a/23432113
+   * Connecting using Apple Bonjour and `pi@raspberrypi.local`: https://raspberrypi.stackexchange.com/a/45199
 
-   [![.img/step03a.png](.img/step03a.png)](#nolink)
-
-   * Connect a USB keyboard and HDMI monitor to the Pi using the adapters
-   * Login as default username `pi` and password `raspberry`
-   * Execute `ifconfig` and determine Pi's IP address
-      * Look under the `wlan0` section
-      * Find the IP address after `inet`
-
-   [![.img/step03b.png](.img/step03b.png)](#nolink)
-
-3. You **do not** have access to your network's router or adapters
-   * You can connect to you Raspberry Pi through USB: [https://www.tomshardware.com/reviews/raspberry-pi-headless-setup-how-to,6028.html](https://www.tomshardware.com/reviews/raspberry-pi-headless-setup-how-to,6028.html)
-   * You have to scan your network for all IP addresses: [https://www.raspberrypi.org/documentation/remote-access/ip-address.md](https://www.raspberrypi.org/documentation/remote-access/ip-address.md)
+3. If the above fails, check the [Troubleshooting](#troubleshooting) section
 
 ### 3.2. Remote connection to Raspberry Pi
 
 * We will use Bash secure shell (SSH) through the WSL command line interface
-* Knowing the Pi's IP address, SSH as default username `pi@<IP ADDRESS>` and password `raspberry`
-   * You may get a warning of `The authenticity of host...`, just answer `yes`
+* Knowing the Pi's IP address, SSH as the default username `pi@<IP ADDRESS>` and password `raspberry`
    * Typing the password will be invisible for security
+   * You may get a warning of `The authenticity of host...`, just answer `yes`
 
    [![.img/step03c.png](.img/step03c.png)](#nolink)
 
@@ -212,7 +199,8 @@
 
 ### 4.1. Add update source
 
-* After logging in, we need to add a location where the Pi will look for updates, run
+* After logging in, we need to add a location where the Pi will look for updates
+* Copy and paste the line code after the "`$`" and press ENTER:
 
 ```
 $ sudo nano /etc/apt/sources.list
@@ -225,8 +213,8 @@ $ sudo nano /etc/apt/sources.list
 ### 4.2. Updates
 
 * We need to update everything on the Pi and install a few new programs that the Craft server is dependent on (a.k.a. dependencies)
-* Copy and paste the entire multi-line block of code after the "`$`" and press ENTER
-   * Coffee break #2: This will take 10+ mins. and you don't need to babysit this
+* Copy and paste the entire multi-line block of code after the "`$`" and press ENTER:
+   * Coffee break #2: It'll take 10+ mins. and you don't need to babysit this
 
 ```
 $ sudo apt-get update && \
@@ -256,7 +244,7 @@ $ cd ~ && \
 ### 5.2. Build Craft program
 
 * We can now build the Craft program to run on the specific Raspberry Pi Zero W hardware
-   * Coffee break #3: This will take ~10 mins. and you don't need to babysit this
+   * Coffee break #3: It'll take ~10 mins. and you don't need to babysit this
 
 ```
 $ make && \
@@ -266,12 +254,13 @@ $ make && \
 ### 5.3. Start Craft server
 
 * The server program hosts a persistent, shared world for users (clients) to connect to and play together
-* Remember the IP address for the Pi, this IP is the address that clients will connect to within your local area network (LAN)
 * Once you run the line below, the server program will start displaying events as they happen in the game world (players connecting, logging out, etc.)
 
 ```
 $ python server.py
 ```
+
+* Remember the IP address for the Pi, this IP is the address that clients will connect to within your local area network (LAN)
 
 [Back to Top](#table-of-contents)
 
@@ -281,7 +270,7 @@ $ python server.py
 
 ### 6.1. Registering an account
 
-* Even if we made our own sever here, we still need to register an account on the author's website: https://craft.michaelfogleman.com/
+* Even though we made our own sever here, we still need to register an account on the creator of Craft's website: https://craft.michaelfogleman.com/
 
 > "Why register?
 >
@@ -296,20 +285,20 @@ $ python server.py
 [![.img/step06a.png](.img/step06a.png)](#nolink)
 
 * **Highlight the line and `CTRL`+`C`** (pressing the copy to clipboard button didn't work for me to paste in the game)
-* NOTE: You can only see and copy this key once; when you close the window or logout, you will have to make another key
+* NOTE: You can only see this key once; if you close this window, you will have to make another key if you need it again
 
 ### 6.2. Download Craft client
 
 * Download the Craft client for Windows or MacOS here: https://www.michaelfogleman.com/projects/craft/
-   * This is a "portable" program; nothing needs to be installed, just extract the ZIP file
+* This is a "portable" program; nothing needs to be installed, just extract the ZIP file
 * Run `craft.exe`
 
 ### 6.3. Connecting to Craft server
 
 * Once the game starts, press "`T`" and `CTRL`+`V` to paste in your Identity Token and press ENTER (slash "`/`" in front is used to denote system commands)
-* Press "`T`" and enter `/online <SERVER IP>` to connect to your Raspberry Pi Zero Craft server
+* Press "`T`" and enter "`/online <SERVER IP>`" to connect to your Raspberry Pi Zero Craft server
    * Once on the server, you should automatically be connected as your account
-   * The server may accidentally log you off your username after you connect; if it says you are a "guest", you must re-login: `/login <USERNAME>`
+   * The server may accidentally log you off your username after you connect; if it says you are a "guest", you must re-login: "`/login <USERNAME>`"
 
 [![.img/step06b.png](.img/step06b.png)](#nolink)
 
@@ -402,10 +391,35 @@ Official Raspberry Pi Project Ideas | https://projects.raspberrypi.org/en/
 
 Issue | Solution
 --- | ---
+I don't need a password to use my WiFi | If you administer your own "open" network that does not require a password, **you should secure your network ASAP**: [https://lifehacker.com/how-to-make-your-wifi-router-as-secure-as-possible-1827695547](https://lifehacker.com/how-to-make-your-wifi-router-as-secure-as-possible-1827695547)
 Cannot access micro SD card `boot` drive after OS image burn | Must have formatted the card (to have a partition) **BEFORE** burning the Raspbian image to the card; repeat steps 1-3 in [2.2. Prepare Micro SD Card](#22-prepare-micro-sd-card)
 Reformatted micro SD card's free space is **less** than before | Multiple partitions may exist on card from a previous OS burn; erase all partitions before formatting as **one partition**
-Cannot find Pi's IP address | _Did the Pi actually connect to your WiFi network successfully?_ May have to go back and verify `wpa_supplicant.conf` or confirm you can connect new devices to your network
+Cannot find Pi's IP address | _Did the Pi actually connect to your WiFi network successfully?_ Go back and verify `wpa_supplicant.conf` or confirm you have permission to connect new devices to your network<br><br>You can also verify connection status and the assigned IP address by connecting to the Pi _locally_ (see below)  
 Player camera slowly looks up automatically | Bug? I had this issue when the game is maximized to fullscreen or the window was expanded outside the limits of the screen; just play windowed if this happens
+
+### **Advanced methods to connect to a headless Raspberry Pi**
+
+### Connecting via USB cable
+
+* You will need the USB charging cable
+* https://www.tomshardware.com/reviews/raspberry-pi-headless-setup-how-to,6028.html
+
+### Connecting locally
+
+If you **do not** have access to your network's router but have USB and HDMI adapters:
+   * You need an HDMI compatible TV or monitor
+   * Adapters for micro USB (Male) to USB-A (Female) and Mini HDMI (Male) to HDMI (Female)
+
+   [![.img/step03a.png](.img/step03a.png)](#nolink)
+
+   * Connect a USB keyboard and HDMI monitor to the Pi using the adapters
+   * Login as default username `pi` and password `raspberry`
+   * Execute `ifconfig` and determine Pi's IP address
+      * Look under the `wlan0` section
+      * Find the IP address after `inet`
+      * If the Pi did not successfully connect to your network, there will not be an IP address shown
+
+   [![.img/step03b.png](.img/step03b.png)](#nolink)
 
 [Back to Top](#table-of-contents)
 
