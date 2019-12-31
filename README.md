@@ -206,9 +206,11 @@
 $ sudo nano /etc/apt/sources.list
 ```
 
-* Uncomment (remove "`#`" in front of): `deb-src http://raspbian...`
+* Remove "`#`" in front of: `deb-src http://raspbian...`
    * Press `CTRL+O` then `ENTER` to save
-   * Press `CTRL+X` to exit
+   * Press `CTRL+X` to exit this text editor
+
+   [![.img/step04a.png](.img/step04a.png)](#nolink)
 
 ### 4.2. Updates
 
@@ -247,7 +249,9 @@ $ cd ~ && \
    * Coffee break #3: It'll take ~10 mins. and you don't need to babysit this
 
 ```
-$ make && \
+$ cd ~/Craft && \
+  make && \
+  cd ~/Craft && \
   gcc -std=c99 -O3 -fPIC -shared -o world -I src -I deps/noise deps/noise/noise.c src/world.c
 ```
 
@@ -257,7 +261,8 @@ $ make && \
 * Once you run the line below, the server program will start displaying events as they happen in the game world (players connecting, logging out, etc.)
 
 ```
-$ python server.py
+$ cd ~/Craft && \
+  python server.py
 ```
 
 * Remember the IP address for the Pi, this IP is the address that clients will connect to within your local area network (LAN)
