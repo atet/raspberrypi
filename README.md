@@ -8,7 +8,7 @@
 
 * This introduction to Raspberry Pi only covers what's absolutely necessary to get you up and running
 * You are here because **you want to experience a realistic use case for inexpensive single board computers (SBC) while learning fundamental IT skills**
-* We will be using a Raspberry Pi Zero W and Bash command line interface (CLI)
+* We will be using a Raspberry Pi Zero W and command line interface (CLI)
 
 --------------------------------------------------------------------------------------------------
 
@@ -37,41 +37,45 @@
 
 ## 0. Requirements
 
+**You don't need prior Command Line Interface (CLI) experience for this tutorial**
+
 ### Software
 
-* This tutorial was developed with Microsoft Windows 10 using Bash on Windows Subsystem for Linux (WSL)
+* Windows: This tutorial was developed on Microsoft Windows 10 with Windows Subsystem for Linux (WSL)
+   * You must install WSL so Windows can communicate with Linux on the Raspberry Pi
    * WSL is a fully supported Microsoft product for Windows 10; learn how to install it here: [https://docs.microsoft.com/en-us/windows/wsl/install-win10](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
    * Use "Ubuntu 18.04 LTS" distribution
    * This may take 10+ minutes and require a reboot
 
 > [![.img/step00a.png](.img/step00a.png)](#nolink)
 > 
-> Downloading Ubuntu 18.04 LTS from Microsoft Apps Store
+> Downloading Ubuntu 18.04 LTS from Microsoft App Store
 
-* If you are using MacOS, [your Terminal program is Bash](https://en.wikipedia.org/wiki/Terminal_(macOS))
-* Most Linux distributions use or can use Bash; I recommend Ubuntu 18.04 LTS
+* MacOS: [Your Terminal program is Bash](https://en.wikipedia.org/wiki/Terminal_(macOS))
+* Linux: I recommend Ubuntu 18.04 LTS
 
 ### Computer Hardware
+
+* This tutorial uses the ~$10 Raspberry Pi Zero W ("wireless")
+   * You will also need:
+   1. Cell phone charger (5V) with micro USB cable
+   2. MicroSD card (≥8 GB)
+* NOTE: There exists an older model, the Raspberry Pi Zero (without the "W"), that **does not include WiFi required for this tutorial**
 
 > [![.img/step00b.png](.img/step00b.png)](#nolink)
 > 
 > Raspberry Pi Zero W, a single board computer (SBC)
 
-* This tutorial **requires the ~$10 Raspberry Pi Zero W** ("wireless"), you will also need:
-   1. Cell phone charger (5V) with micro USB cable
-   2. MicroSD card (≥8 GB)
-* NOTE: There exists an older model, the Raspberry Pi Zero (without the "W"), that **does not include WiFi required for this tutorial**
-
 ### WiFi Network
 
 **The Raspberry Pi Zero W has specific WiFi requirements**
 
-1. Can only connect to **2.4 GHz** b/g/n WiFi
+* **2.4 GHz** b/g/n WiFi-only
    * 5 GHz will not work with this model of Raspberry Pi
    * This network can be hidden
-2. Must be able to connect to your WiFi using only the network name (a.k.a. SSID) and password
+* Connect to WiFi using only the network name (a.k.a. SSID) and password
    * Some networks may require additional registration for new devices, like a school or public hotspot; consult your IT department about adding your Pi
-3. The wireless network **must have disabled** [**"wireless isolation"** (a.k.a. AP isolation, station isolation, or client isolation)](https://www.howtogeek.com/179089/lock-down-your-wi-fi-network-with-your-routers-wireless-isolation-option/)
+* **Disabled** [**"wireless isolation"** (a.k.a. AP isolation, station isolation, or client isolation)](https://www.howtogeek.com/179089/lock-down-your-wi-fi-network-with-your-routers-wireless-isolation-option/)
    * There is no compromise on this one; if wireless isolation is not disabled on your network, you will not be able to connect to your Pi trhough WiFi
 
 [Back to Top](#table-of-contents)
@@ -98,19 +102,20 @@
 
 ### 2.1. Download Operating System Image
 
-* We are using **Raspbian Linux Lite**, which is command line interface (CLI) only
-* **You don't need prior CLI experience for this tutorial**
-* Download the latest image from: [https://www.raspberrypi.org/downloads/raspbian/](https://www.raspberrypi.org/downloads/raspbian/)
+* Download the latest **Raspbian Linux Lite** image from: [https://www.raspberrypi.org/downloads/raspbian/](https://www.raspberrypi.org/downloads/raspbian/)
    * Make sure you download the "Lite" version
    * Extract the ZIP folder once the image is downloaded to get the IMG file
 
 [![.img/step02a.png](.img/step02a.png)](#nolink)
 
 ### 2.2. Burn OS Image on Micro SD Card
-   * I used Rufus Portable v3.8: [https://rufus.ie/](https://rufus.ie/)
-   * **You must check if the new drive is called "`boot`" (red box below) once the image is done burning**
-      * If not, see: [Mounting `boot` Drive in Windows Disk Management](#mounting-boot-drive-in-windows-disk-management)
-   * You can just close Rufus when done
+
+* Download Rufus Portable v3.8: [https://rufus.ie/](https://rufus.ie/)
+* Select your micro SD card as the device, choose the Raspbian image, and Start burning
+   * Coffee Break: This will take ~10 mins and you don't need to babysit
+* **You must check if the new drive is called "`boot`" (red box below) once the image is done burning**
+   * If not, see: [Mounting `boot` Drive in Windows Disk Management](#mounting-boot-drive-in-windows-disk-management)
+* You can just close Rufus when done
 
 [![.img/step02b.png](.img/step02b.png)](#nolink)
 
@@ -159,14 +164,14 @@ network={
 
 **After you add these two files, safely eject your prepared micro SD card**
 
-### 2.3. Headless OS installation
+### 2.4. Headless OS installation
 
 **Headless** means that we won't attach a monitor or keyboard to the Pi and all communication to it will be through command line interface (CLI) from another computer
 
 1. The Pi should not be powered on at this time
 2. Insert the prepared micro SD card into the Pi
 3. Plug the micro USB power into the Pi's power port ("`PWR IN`") and the green LED should start blinking
-   * Coffee Break: This will take ~10 mins as the Pi automatically installs the Raspbian OS and connects to your WiFi network; you don't need to babysit this
+   * Coffee Break #2: This will take ~10 mins as the Pi automatically installs the Raspbian OS and connects to your WiFi network; you don't need to babysit
 
    [![.img/step02f.png](.img/step02f.png)](#nolink)
 
@@ -183,7 +188,7 @@ network={
 * Press the Windows key and search for "command" and open **Command Prompt**
 * In Command Prompt, execute "`ping -f raspberrypi.local`", this will give you the IP address that the Pi connected as:
    * This operation will not work in WSL Bash, only Windows Command Prompt
-   * If the above fails, see: [Advanced Connection Methods for Headless Raspberry Pi](#advanced-connection-methods-for-headless-raspberry-pi)
+   * If the above fails or you are not using Windows, see: [Advanced Connection Methods for Headless Raspberry Pi](#advanced-connection-methods-for-headless-raspberry-pi)
 
    [![.img/step031a.png](.img/step031a.png)](#nolink)
 
@@ -243,7 +248,7 @@ pi@raspberrypi:~ $ _
 
 * We need to install a few new programs that the Craft server program is dependent on (a.k.a. dependencies)
 * Copy and paste the entire multi-line command after the "`$`" and press ENTER:
-   * Coffee break #2: This will take 10+ mins. and you don't need to babysit this
+   * Coffee break #3: This will take 10+ mins. and you don't need to babysit this
 
 ```
 $ sudo apt-get update && \
@@ -282,7 +287,7 @@ $ cd ~ && \
 
 * Build the Craft program to run on the specific Raspberry Pi Zero W hardware
    * Don't worry about any warnings, the program should still be built correctly
-   * Coffee break #3: This will take ~10 mins. and you don't need to babysit this
+   * Coffee break #4: This will take ~10 mins. and you don't need to babysit this
 
 ```
 $ cd ~/Craft && \
