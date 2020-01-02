@@ -41,13 +41,19 @@
 
 * This tutorial was developed with Microsoft Windows 10 using Bash on Windows Subsystem for Linux (WSL)
    * WSL is a fully supported Microsoft product for Windows 10; learn how to install it here: [https://docs.microsoft.com/en-us/windows/wsl/install-win10](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
-   * Using the "Ubuntu 18.04 LTS" distribution
+   * Use "Ubuntu 18.04 LTS" distribution
+   * This may take 10+ minutes and require a reboot
+
+> [![.img/step00a.png](.img/step00a.png)](#nolink)
+> 
+> Downloading Ubuntu 18.04 LTS from Microsoft Apps Store
+
 * If you are using MacOS, [your Terminal program is Bash](https://en.wikipedia.org/wiki/Terminal_(macOS))
 * Most Linux distributions use or can use Bash; I recommend Ubuntu 18.04 LTS
 
 ### Computer Hardware
 
-> [![.img/step00a.png](.img/step00a.png)](#nolink)
+> [![.img/step00b.png](.img/step00b.png)](#nolink)
 > 
 > Raspberry Pi Zero W, a single board computer (SBC)
 
@@ -102,7 +108,7 @@
 
 ### 2.2. Burn OS Image on Micro SD Card
    * I used Rufus Portable v3.8: [https://rufus.ie/](https://rufus.ie/)
-   * You must check if the new drive is called "`boot`" (red box below) once the image is done burning
+   * **You must check if the new drive is called "`boot`" (red box below) once the image is done burning**
       * If not, see: [Mounting `boot` Drive in Windows Disk Management](#mounting-boot-drive-in-windows-disk-management)
    * You can just close Rufus when done
 
@@ -110,7 +116,7 @@
 
 ### 2.3. Access New `boot` Drive
 
-   * **If you cannot read the SD card**, see: [Mounting `boot` Drive in Windows Disk Management](#mounting-boot-drive-in-windows-disk-management)
+**If you cannot read the SD card, see:** [**Mounting `boot` Drive in Windows Disk Management**](#mounting-boot-drive-in-windows-disk-management)
 
 #### 2.3.1. Show file name extensions
 
@@ -121,22 +127,18 @@
 
 #### 2.3.2. Make two new configuration files
 
-* Make a new file called `ssh` (without a file extension)
+* Make a new file called "`ssh`" (without a file extension)
    * Windows will give a warning, just choose "Yes"
    * This file will remain empty
-* Make a new file called `wpa_supplicant.conf`
+* Make another new file called "`wpa_supplicant.conf`"
 
 [![.img/step02d.png](.img/step02d.png)](#nolink)
 
 #### 2.3.3. `wpa_supplicant.conf` settings
 
-* Open `wpa_supplicant.conf` with Notepad (right-click → Open with → Choose another app → Notepad)
+* Open "`wpa_supplicant.conf`" with Notepad (right-click → Open with → Choose another app → Notepad)
 
 [![.img/step02e.png](.img/step02e.png)](#nolink)
-
-* Copy and paste the following, changing `ssid` and `psk` to match your network's name and password and save
-   * If your WiFi network is hidden, you must use the line `scan_ssid=1`
-   * Change the country code as appropriate
 
 ```
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
@@ -151,16 +153,20 @@ network={
 }
 ```
 
-**After you add these files, safely eject your prepared micro SD card**
+* Copy and paste the above, changing "`ssid`" and "`psk`" to match your network's name and password and save
+   * If your WiFi network is hidden, you must use the line "`scan_ssid=1`"
+   * Change the country code as appropriate
+
+**After you add these two files, safely eject your prepared micro SD card**
 
 ### 2.3. Headless OS installation
 
 **Headless** means that we won't attach a monitor or keyboard to the Pi and all communication to it will be through command line interface (CLI) from another computer
 
 1. The Pi should not be powered on at this time
-2. Insert prepared micro SD card
-3. Plug the micro USB power into the Pi's power port (`PWR IN`) and the green LED should start blinking
-   * Coffee Break: It'll take ~10 mins while the Raspbian OS installs, configures itself, and automatically connects to your WiFi network
+2. Insert the prepared micro SD card into the Pi
+3. Plug the micro USB power into the Pi's power port ("`PWR IN`") and the green LED should start blinking
+   * Coffee Break: This will take ~10 mins as the Pi automatically installs the Raspbian OS and connects to your WiFi network; you don't need to babysit this
 
    [![.img/step02f.png](.img/step02f.png)](#nolink)
 
@@ -174,30 +180,24 @@ network={
 
 ### 3.1. Determining the IP address of your headless Raspberry Pi
 
-**This may be tricky depending on your unique situation, two scenarios here:**
-
-1. If you have administrative access to your local network's router:
-   * Log into the router and determine the IP address that corresponds to the hostname `raspberrypi` (default name for your Pi)
-   * Below is an example router administration page to look up the IP addresses associated with connected devices
+* Press the Windows key and search for "command" and open **Command Prompt**
+* In Command Prompt, execute "`ping -f raspberrypi.local`", this will give you the IP address that the Pi connected as:
+   * This operation will not work in WSL Bash, only Windows Command Prompt
+   * If the above fails, see: [Advanced Connection Methods for Headless Raspberry Pi](#advanced-connection-methods-for-headless-raspberry-pi)
 
    [![.img/step031a.png](.img/step031a.png)](#nolink)
 
-2. If you **do not** have admin access to your network's router, you can try:
-   * Scanning your network for connected IP addresses: https://stackoverflow.com/a/23432113
-   * Connecting as `pi@raspberrypi.local` using Apple Bonjour service: https://raspberrypi.stackexchange.com/a/45199
-
-3. If the above fails, see: [Advanced Connection Methods for Headless Raspberry Pi](#advanced-connection-methods-for-headless-raspberry-pi)
-
 ### 3.2. Remote connection to Raspberry Pi
 
-* We will use Bash secure shell (SSH) through the WSL command line interface
-* Knowing the Pi's IP address, SSH as the default username `pi@<IP ADDRESS>` and password `raspberry`
+* Press the Windows key and search for "ubuntu" and open **Ubuntu 18.04 LTS**
+* In Ubuntu Bash, execute "`ssh pi@<PI'S IP ADDRESS>`"
+   * Use the default password "`raspberry`"
    * Typing the password will be invisible for security, just type `raspberry` and press Enter
-   * You may get a warning of `The authenticity of host...`, just answer `yes`
+   * You may get a warning of "`The authenticity of host...`", just answer "`yes`"
 
    [![.img/step03c.png](.img/step03c.png)](#nolink)
 
-**After you successfully log in and see "`pi@raspberrypi:~ $ _`", all the hard work is done**
+**After you successfully log in and see "`pi@raspberrypi:~ $ _`", all the hard work is now done**
 
 [![.img/step03d.png](.img/step03d.png)](#nolink)
 
@@ -210,7 +210,7 @@ network={
 ### 4.1. Add update source
 
 * After logging in, we need to add a location where the Pi will look for updates
-* Copy and paste the line code after the "`$`" and press ENTER:
+* Copy and paste the command after the "`$`" and press ENTER:
 
 ```
 $ sudo nano /etc/apt/sources.list
@@ -222,13 +222,13 @@ $ sudo nano /etc/apt/sources.list
 
    [![.img/step04a.png](.img/step04a.png)](#nolink)
 
-* After changing the above file, **you must run the following and ensure there are no issues or errors**:
+* After changing the above file, **you must run the following command and ensure there are no issues or errors**:
 
 ```
 $ sudo apt-get update
 ```
 
-* You must rerun the above line if you see any issues like:
+* You must re-run the above line if you see any issues like:
 
 ```
 .
@@ -241,9 +241,9 @@ pi@raspberrypi:~ $ _
 
 ### 4.2. Updates
 
-* We need to update everything on the Pi and install a few new programs that the Craft server program is dependent on (a.k.a. dependencies)
-* Copy and paste the entire multi-line block of code after the "`$`" and press ENTER:
-   * Coffee break #2: It'll take 10+ mins. and you don't need to babysit this
+* We need to install a few new programs that the Craft server program is dependent on (a.k.a. dependencies)
+* Copy and paste the entire multi-line command after the "`$`" and press ENTER:
+   * Coffee break #2: This will take 10+ mins. and you don't need to babysit this
 
 ```
 $ sudo apt-get update && \
@@ -253,7 +253,7 @@ $ sudo apt-get update && \
   python -m pip install requests
 ```
 
-* **NOTE: If there are issues in the next few steps,** you may have to re-run each line above by itself to confirm they ran successfully
+* **NOTE: If there are issues in the next few steps,** you may have to re-run each line above by itself and confirm they executed successfully
 
 ```
 $ sudo apt-get update
@@ -282,7 +282,7 @@ $ cd ~ && \
 
 * Build the Craft program to run on the specific Raspberry Pi Zero W hardware
    * Don't worry about any warnings, the program should still be built correctly
-   * Coffee break #3: It'll take ~10 mins. and you don't need to babysit this
+   * Coffee break #3: This will take ~10 mins. and you don't need to babysit this
 
 ```
 $ cd ~/Craft && \
@@ -293,8 +293,8 @@ $ cd ~/Craft && \
 
 ### 5.3. Start Craft server
 
-* The server program must be actively running to host a multiplayer world for users (clients) to log into
-* Once you execute the line below, the server program will start running and display events as they happen in the game world (players connecting, logging out, etc.)
+* The Craft server program must be actively running to host a multiplayer world for users (clients) to log into
+* Once you execute the line below, the server program will start running and display events as they happen in the game world (players connecting, players logging out, etc.)
 
 ```
 $ cd ~/Craft && \
@@ -317,8 +317,8 @@ $ cd ~/Craft && \
 
 ### 6.2. Connecting to Craft server
 
-* Once the game starts, press "`T`" and enter "`/online <SERVER IP>`" to connect to your Raspberry Pi Zero Craft server
-   * You will be automatically logged on as "`guest1`"
+* Once the game starts, press "`T`" and enter "`/online <PI'S IP ADDRESS>`" to connect to your Craft multiplayer server
+   * You will be automatically logged on as a guest
    * Currently, guests cannot make changes to the multiplayer world, for details see: [DEFUNCT: Registering a Craft Account](#defunct-registering-a-craft-account)
 
 [![.img/step06ba.png](.img/step06ba.png)](#nolink)
@@ -349,8 +349,7 @@ More controls | https://github.com/fogleman/Craft#controls
 * Other players will not be able to connect to your single-player mode world
 * **The only way to have multiplayer in Craft is to connect to a server that is actively running the Craft server program**
    * In order to make changes to your multiplayer world, you must register for a free Craft account on the author's website
-   * **NOTICE: You cannot register a new Craft account at this time (Jan. 1, 2020). You can still still log onto your server as a "guest" to finish this tutorial**
-   * For details, see [DEFUNCT: Registering a Craft Account](#defunct-registering-a-craft-account)
+   * **NOTICE: You cannot register a new Craft account at this time (Jan. 1, 2020)** for details, see [DEFUNCT: Registering a Craft Account](#defunct-registering-a-craft-account)
 
 ### 6.5. Cleanup
 
@@ -484,12 +483,27 @@ Player camera slowly looks up automatically | Bug? I had this issue when the gam
 
 ### **Advanced Connection Methods for Headless Raspberry Pi**
 
-### Connecting via USB cable
+#### If you have administrative access to your local network's router:
+   * Log into the router and determine the IP address that corresponds to the hostname `raspberrypi` (default name for your Pi)
+   * Below is an example router administration page to look up the IP addresses associated with connected devices
+
+   [![.img/step031b.png](.img/step031b.png)](#nolink)
+
+#### If you **do not** have admin access to your network's router, you can try:
+   * Scanning your network for connected IP addresses with Angry IP Scanner: https://stackoverflow.com/a/23432113
+      * You will need Java Runtime Environment for the Angry IP Scanner program: https://www.java.com/en/download/win10.jsp
+
+      [![.img/step031c.png](.img/step031c.png)](#nolink)
+
+   * Connecting as `pi@raspberrypi.local` using Apple Bonjour service: https://raspberrypi.stackexchange.com/a/45199
+      * Download Bonjour Print Services for Windows v2.0.2: https://support.apple.com/kb/DL999?locale=en_US
+
+#### Connecting via USB cable
 
 * You will need the USB charging cable
 * https://www.tomshardware.com/reviews/raspberry-pi-headless-setup-how-to,6028.html
 
-### Connecting locally
+#### Connecting locally
 
 If you **do not** have access to your network's router but have USB and HDMI adapters:
    * You need an HDMI compatible TV or monitor
