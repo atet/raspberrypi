@@ -8,7 +8,7 @@
 
 * This introduction to Raspberry Pi only covers what's absolutely necessary to get you up and running
 * You are here because **you want to experience a realistic use case for inexpensive single board computers (SBC) while learning fundamental IT skills**
-* We will be using a Raspberry Pi Zero W and command line interface (CLI)
+* We will be using the $10 Raspberry Pi Zero W and command line interface (CLI)
 
 --------------------------------------------------------------------------------------------------
 
@@ -56,27 +56,29 @@
 
 ### Computer Hardware
 
-* This tutorial uses the ~$10 Raspberry Pi Zero W ("wireless")
+* This tutorial uses the $10 Raspberry Pi Zero W ("wireless")
    * You will also need:
    1. Cell phone charger (5V) with micro USB cable
    2. MicroSD card (≥8 GB)
-* NOTE: There exists an older model, the Raspberry Pi Zero (without the "W"), that **does not include WiFi required for this tutorial**
+* NOTE: There exists an older model, the Raspberry Pi Zero (without the "W"), that **does not include WiFi capability required for this tutorial**
 
 > [![.img/step00b.png](.img/step00b.png)](#nolink)
 > 
-> Raspberry Pi Zero W, a single board computer (SBC)
+> [Raspberry Pi Zero W, a $10 single board computer (SBC)](https://www.raspberrypi.org/products/raspberry-pi-zero-w/)
 
 ### WiFi Network
 
-**The Raspberry Pi Zero W has specific WiFi requirements**
+**The Raspberry Pi Zero W has specific WiFi requirements:**
 
-* **2.4 GHz** b/g/n WiFi-only
+* 2.4 GHz b/g/n WiFi-only
    * 5 GHz will not work with this model of Raspberry Pi
    * This network can be hidden
 * Connect to WiFi using only the network name (a.k.a. SSID) and password
    * Some networks may require additional registration for new devices, like a school or public hotspot; consult your IT department about adding your Pi
-* **Disabled** [**"wireless isolation"** (a.k.a. AP isolation, station isolation, or client isolation)](https://www.howtogeek.com/179089/lock-down-your-wi-fi-network-with-your-routers-wireless-isolation-option/)
+* Disabled ["wireless isolation" (a.k.a. AP isolation, station isolation, or client isolation)](https://www.howtogeek.com/179089/lock-down-your-wi-fi-network-with-your-routers-wireless-isolation-option/)
    * There is no compromise on this one; if wireless isolation is not disabled on your network, you will not be able to connect to your Pi trhough WiFi
+
+**Once you have everything here, you're ready to go!**
 
 [Back to Top](#table-of-contents)
 
@@ -125,7 +127,7 @@
 
 #### 2.3.1. Show file name extensions
 
-* We need to make the file name extensions visible for this next part
+* File name extensions must be visible for this next part
 * Click on the "View" tab, then "Show/hide" button, then enable "File name extensions"
 
 [![.img/step02c.png](.img/step02c.png)](#nolink)
@@ -170,11 +172,11 @@ network={
 
 1. The Pi should not be powered on at this time
 2. Insert the prepared micro SD card into the Pi
+
+[![.img/step02f.png](.img/step02f.png)](#nolink)
+
 3. Plug the micro USB power into the Pi's power port ("`PWR IN`") and the green LED should start blinking
    * Coffee Break #2: This will take ~10 mins as the Pi automatically installs the Raspbian OS and connects to your WiFi network; you don't need to babysit
-
-   [![.img/step02f.png](.img/step02f.png)](#nolink)
-
 4. When the Pi is ready, the green LED should stop blinking and stay on
 
 [Back to Top](#table-of-contents)
@@ -196,9 +198,9 @@ network={
 
 * Press the Windows key and search for "ubuntu" and open **Ubuntu 18.04 LTS**
 * In Ubuntu Bash, execute "`ssh pi@<PI'S IP ADDRESS>`"
-   * Use the default password "`raspberry`"
-   * Typing the password will be invisible for security, just type `raspberry` and press Enter
    * You may get a warning of "`The authenticity of host...`", just answer "`yes`"
+   * Use the default password "`raspberry`" and press Enter
+      * Typing the password will be invisible for security
 
    [![.img/step03c.png](.img/step03c.png)](#nolink)
 
@@ -258,7 +260,7 @@ $ sudo apt-get update && \
   python -m pip install requests
 ```
 
-* **NOTE: If there are issues in the next few steps,** you may have to re-run each line above by itself and confirm they executed successfully
+* **NOTE: If there are issues in the next few steps,** you may have to come back here and re-run each line above by itself and confirm they executed successfully
 
 ```
 $ sudo apt-get update
@@ -285,9 +287,9 @@ $ cd ~ && \
 
 ### 5.2. Build Craft program
 
-* Build the Craft program to run on the specific Raspberry Pi Zero W hardware
-   * Don't worry about any warnings, the program should still be built correctly
+* Build the Craft program to run on the Raspberry Pi Zero W
    * Coffee break #4: This will take ~10 mins. and you don't need to babysit this
+   * There may be some warnings, but the program should build correctly if everything from step 4.2. was successful
 
 ```
 $ cd ~/Craft && \
@@ -317,14 +319,12 @@ $ cd ~/Craft && \
 ### 6.1. Download Craft client
 
 * Download the Craft client for Windows or MacOS here: https://www.michaelfogleman.com/projects/craft/
-* This is a "portable" program (nothing needs to be installed), just extract the ZIP file
+   * This is a "portable" program (nothing needs to be installed), just extract the ZIP file
 * Run `craft.exe`
 
 ### 6.2. Connecting to Craft server
 
 * Once the game starts, press "`T`" and enter "`/online <PI'S IP ADDRESS>`" to connect to your Craft multiplayer server
-   * You will be automatically logged on as a guest
-   * Currently, guests cannot make changes to the multiplayer world, for details see: [DEFUNCT: Registering a Craft Account](#defunct-registering-a-craft-account)
 
 [![.img/step06ba.png](.img/step06ba.png)](#nolink)
 
@@ -332,7 +332,10 @@ $ cd ~/Craft && \
 
 **CONGRATS! You're done with the tutorial**
 
-Have some fun and build a new world in your own Craft playground:
+* You will be automatically logged on as a guest when you connect to your Craft server
+   * Currently, **guests cannot make changes to the multiplayer world**, for details see: [DEFUNCT: Registering a Craft Account](#defunct-registering-a-craft-account)
+* **Switch back to single-player mode** by pressing "`T`" and enter "`/offline`"
+   * Have some fun and build a new world in your own Craft playground:
 
 Button | Action
 --- | ---
@@ -460,7 +463,9 @@ I don't need a password to use my WiFi | If you administer your own "open" netwo
 Cannot access micro SD card `boot` drive after OS image burn | Mount the newly created "`boot`" drive in Windows Disk Management, instructions here: [Mounting `boot` Drive in Windows Disk Management](#mounting-boot-drive-in-windows-disk-management)
 Reformatted micro SD card's free space is **less** than before | Multiple partitions may exist on card from a previous OS burn; proceed to burn image with Rufus again and Rufus will automatically erase all partitions on the SD card
 Cannot find Pi's IP address | _Did the Pi actually connect to your WiFi network successfully?_ Go back and verify `wpa_supplicant.conf` or confirm you have permission to connect new devices to your network<br><br>You can also verify connection status and the assigned IP address by connecting to the Pi _locally_: [Advanced Connection Methods for Headless Raspberry Pi](#advanced-connection-methods-for-headless-raspberry-pi)
+`Permission denied` while attempting to log into Pi | Make sure you login as the user "`pi`", i.e. "`ssh pi@<PI'S IP ADDRESS>`"
 `git` will not download the Craft files | `git` will not download files if there is already a directory with the name "`Craft`", if you previously performed the `git` step and needed to redo it, you must first delete the existing "`Craft`" directory with:<br><br>`$ rm -rf ~/Craft`
+Craft client closes when attempting to log into multiplayer server | Craft server program must be running on the Raspberry Pi server
 Player camera slowly looks up automatically | Bug? I had this issue when the game is maximized to fullscreen or the window was expanded outside the limits of the screen; just play windowed if this happens
 "`Only logged in users are allowed to build`": Cannot make changes to multiplayer world | In order to make changes to your multiplayer world, you must register for a free Craft account on the author's website, see: [DEFUNCT: Registering a Craft Account](#defunct-registering-a-craft-account)
 
@@ -475,14 +480,14 @@ Player camera slowly looks up automatically | Bug? I had this issue when the gam
 * Press the Windows key and search for "disk management"
 * Click on "Create and format hard disk partitions" which will open the Windows Disk Management program
 * In the bottom windows pane, find your micro SD card
-* Right-click on the 'boot' partition and select "Change Drive Letter and Paths..."
+* Right-click on the "`boot`" partition and select "Change Drive Letter and Paths..."
 
 [![.img/tb.png](.img/tb.png)](#nolink)
 
 * Click on "Add"
 * Windows will automatically choose a drive letter that is not used, your may be different than what's seen here
-* Press "OK" and you will see that Windows has mounted your new SD card `boot` partition (see red boxes below)
-* You can now open and navigate this `boot` drive in Windows File Explorer and continue with step [2.3. Access New `boot` Drive](#23-access-new-boot-drive)
+* Press "OK" and you will see that Windows has mounted your new SD card "`boot`" partition (see red boxes below)
+* You can now open and navigate this "`boot`" drive in Windows File Explorer and continue with step [2.3. Access New `boot` Drive](#23-access-new-boot-drive)
 
 [![.img/tc.png](.img/tc.png)](#nolink)
 
