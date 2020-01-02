@@ -27,6 +27,7 @@
 
 ### Supplemental
 
+* [DEFUNCT: Registering a Craft Account](#defunct-registering-a-craft-account)
 * [Why Raspberry Pi?](#why-raspberry-pi)
 * [Other Resources](#other-resources)
 * [Troubleshooting](#troubleshooting)
@@ -38,8 +39,9 @@
 
 ### Software
 
-* This tutorial was developed with Bash on Microsoft Windows 10 with Windows Subsystem for Linux (WSL) using Ubuntu 18.04 LTS
-   * WSL is a fully supported Microsoft product for Windows 10, learn how to install it here: [https://docs.microsoft.com/en-us/windows/wsl/install-win10](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
+* This tutorial was developed with Microsoft Windows 10 using Bash on Windows Subsystem for Linux (WSL)
+   * WSL is a fully supported Microsoft product for Windows 10; learn how to install it here: [https://docs.microsoft.com/en-us/windows/wsl/install-win10](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
+   * Using the "Ubuntu 18.04 LTS" distribution
 * If you are using MacOS, [your Terminal program is Bash](https://en.wikipedia.org/wiki/Terminal_(macOS))
 * Most Linux distributions use or can use Bash; I recommend Ubuntu 18.04 LTS
 
@@ -52,17 +54,18 @@
 * This tutorial **requires the ~$10 Raspberry Pi Zero W** ("wireless"), you will also need:
    1. Cell phone charger (5V) with micro USB cable
    2. MicroSD card (≥8 GB)
-   * NOTE: There exists an older model, Raspberry Pi Zero (without the "W"), that **does not include WiFi functionality required for this tutorial**
-* This tutorial should also work with any computer that can run Linux
+* NOTE: There exists an older model, the Raspberry Pi Zero (without the "W"), that **does not include WiFi required for this tutorial**
 
 ### WiFi Network
 
-**The Pi Zero W requires very specific WiFi settings**
+**The Raspberry Pi Zero W has specific WiFi requirements**
 
-1. You must be able to connect a new wireless device to your WiFi network using only the network name (a.k.a. SSID) and network password
+1. Can only connect to **2.4 GHz** b/g/n WiFi
+   * 5 GHz will not work with this model of Raspberry Pi
+   * This network can be hidden
+2. Must be able to connect to your WiFi using only the network name (a.k.a. SSID) and password
    * Some networks may require additional registration for new devices, like a school or public hotspot; consult your IT department about adding your Pi
-   * The network can be hidden
-2. The wireless network **must have disabled** [**"wireless isolation"** (a.k.a. AP isolation, station isolation, or client isolation)](https://www.howtogeek.com/179089/lock-down-your-wi-fi-network-with-your-routers-wireless-isolation-option/)
+3. The wireless network **must have disabled** [**"wireless isolation"** (a.k.a. AP isolation, station isolation, or client isolation)](https://www.howtogeek.com/179089/lock-down-your-wi-fi-network-with-your-routers-wireless-isolation-option/)
    * There is no compromise on this one; if wireless isolation is not disabled on your network, you will not be able to connect to your Pi trhough WiFi
 
 [Back to Top](#table-of-contents)
@@ -71,8 +74,8 @@
 
 ## 1. _Game_ Plan
 
-* Let's do something fun and setup a Craft<sup>[[1]](#acknowledgments)</sup> server to host multiple players at the same time
-* Several different skills are introduced in this short project:
+* Let's do something fun and setup a Craft<sup>[[1]](#acknowledgments)</sup> server to host multiplayer games
+* Several different skills are introduced in this short tutorial:
    1. Basic IT: Formatting disks and installing operating systems
    2. Networking: Local area networking and secure shell access
    3. System Administration: Command line interface, building from source code, and running a server
@@ -93,60 +96,62 @@
 * **You don't need prior CLI experience for this tutorial**
 * Download the latest image from: [https://www.raspberrypi.org/downloads/raspbian/](https://www.raspberrypi.org/downloads/raspbian/)
    * Make sure you download the "Lite" version
-   * Extract the ZIP folder once the image is downloaded
+   * Extract the ZIP folder once the image is downloaded to get the IMG file
 
 [![.img/step02a.png](.img/step02a.png)](#nolink)
 
-### 2.2. Prepare Micro SD Card
-
-**This is the only step that can be frustrating and may take a few retries**
-
-1. Format micro SD card
-   * Windows Disk Management: Press the Windows key and search for "disk management"
-2. Reformat the card
-   * Windows: Creating a new simple disk in Disk Management here will also reformat the SD card
-   * (TODO: More details)
-3. Burn the Raspbian image onto the formatted micro SD card
+### 2.2. Burn OS Image on Micro SD Card
    * I used Rufus Portable v3.8: [https://rufus.ie/](https://rufus.ie/)
-   * If you do not format the SD card **before** this step (in case you used a utility other than Disk Management), you may not be able to read the SD card as the `boot` drive
-   * When the image burn is complete, just cancel out of Rufus
+   * You must check if the new drive is called "`boot`" (red box below) once the image is done burning
+      * If not, see: [Mounting `boot` Drive in Windows Disk Management](#mounting-boot-drive-in-windows-disk-management)
+   * You can just close Rufus when done
 
 [![.img/step02b.png](.img/step02b.png)](#nolink)
 
-4. Access the new `boot` drive
-   * **If you cannot read the card**; repeat steps 1-3
-   * Show file name extensions
+### 2.3. Access New `boot` Drive
+
+   * **If you cannot read the SD card**, see: [Mounting `boot` Drive in Windows Disk Management](#mounting-boot-drive-in-windows-disk-management)
+
+#### 2.3.1. Show file name extensions
+
+* We need to make the file name extensions visible for this next part
+* Click on the "View" tab, then "Show/hide" button, then enable "File name extensions"
 
 [![.img/step02c.png](.img/step02c.png)](#nolink)
 
-5. Make two new configuration files
-   * Make a new file called `ssh` (no file extension)
-      * This file will remain empty
-   * Make a new file called `wpa_supplicant.conf`
+#### 2.3.2. Make two new configuration files
+
+* Make a new file called `ssh` (without a file extension)
+   * Windows will give a warning, just choose "Yes"
+   * This file will remain empty
+* Make a new file called `wpa_supplicant.conf`
 
 [![.img/step02d.png](.img/step02d.png)](#nolink)
 
-6. `wpa_supplicant.conf` settings
-   * Open `wpa_supplicant.conf` with Notepad (right-click → Open with → Choose another app → Notepad)
+#### 2.3.3. `wpa_supplicant.conf` settings
 
-   [![.img/step02e.png](.img/step02e.png)](#nolink)
+* Open `wpa_supplicant.conf` with Notepad (right-click → Open with → Choose another app → Notepad)
 
-   * Copy and paste the following, changing `<NETWORK NAME>` and `<NETWORK PASSWORD>` to match your network's and save
-      * If your WiFi network is hidden, you must use the line `scan_ssid=1`
-      * Change the country code as appropriate
+[![.img/step02e.png](.img/step02e.png)](#nolink)
 
-   ```
-   ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-   update_config=1
-   country=US
+* Copy and paste the following, changing `ssid` and `psk` to match your network's name and password and save
+   * If your WiFi network is hidden, you must use the line `scan_ssid=1`
+   * Change the country code as appropriate
 
-   network={
-      ssid="<NETWORK NAME>"
-      scan_ssid=1
-      psk="<NETWORK PASSWORD>"
-      key_mgmt=WPA-PSK
-   }
-   ```
+```
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=US
+
+network={
+   ssid="My Apartment 2.4Ghz"
+   scan_ssid=1
+   psk="password123"
+   key_mgmt=WPA-PSK
+}
+```
+
+**After you add these files, safely eject your prepared micro SD card**
 
 ### 2.3. Headless OS installation
 
@@ -154,8 +159,11 @@
 
 1. The Pi should not be powered on at this time
 2. Insert prepared micro SD card
-3. Plug the micro USB power into the Pi's power port and the green LED should start blinking
+3. Plug the micro USB power into the Pi's power port (`PWR IN`) and the green LED should start blinking
    * Coffee Break: It'll take ~10 mins while the Raspbian OS installs, configures itself, and automatically connects to your WiFi network
+
+   [![.img/step02f.png](.img/step02f.png)](#nolink)
+
 4. When the Pi is ready, the green LED should stop blinking and stay on
 
 [Back to Top](#table-of-contents)
@@ -166,7 +174,7 @@
 
 ### 3.1. Determining the IP address of your headless Raspberry Pi
 
-**This may be tricky depending on your unique situation:**
+**This may be tricky depending on your unique situation, two scenarios here:**
 
 1. If you have administrative access to your local network's router:
    * Log into the router and determine the IP address that corresponds to the hostname `raspberrypi` (default name for your Pi)
@@ -176,20 +184,22 @@
 
 2. If you **do not** have admin access to your network's router, you can try:
    * Scanning your network for connected IP addresses: https://stackoverflow.com/a/23432113
-   * Connecting using Apple Bonjour and `pi@raspberrypi.local`: https://raspberrypi.stackexchange.com/a/45199
+   * Connecting as `pi@raspberrypi.local` using Apple Bonjour service: https://raspberrypi.stackexchange.com/a/45199
 
-3. If the above fails, check the [Troubleshooting](#troubleshooting) section
+3. If the above fails, see: [Advanced Connection Methods for Headless Raspberry Pi](#advanced-connection-methods-for-headless-raspberry-pi)
 
 ### 3.2. Remote connection to Raspberry Pi
 
 * We will use Bash secure shell (SSH) through the WSL command line interface
 * Knowing the Pi's IP address, SSH as the default username `pi@<IP ADDRESS>` and password `raspberry`
-   * Typing the password will be invisible for security
+   * Typing the password will be invisible for security, just type `raspberry` and press Enter
    * You may get a warning of `The authenticity of host...`, just answer `yes`
 
    [![.img/step03c.png](.img/step03c.png)](#nolink)
 
-**If you successfully log in, all the hard work is done**
+**After you successfully log in and see "`pi@raspberrypi:~ $ _`", all the hard work is done**
+
+[![.img/step03d.png](.img/step03d.png)](#nolink)
 
 [Back to Top](#table-of-contents)
 
@@ -207,14 +217,31 @@ $ sudo nano /etc/apt/sources.list
 ```
 
 * Remove "`#`" in front of: `deb-src http://raspbian...`
-   * Press `CTRL+O` then `ENTER` to save
+   * Press `CTRL+O` then `ENTER` to save file
    * Press `CTRL+X` to exit this text editor
 
    [![.img/step04a.png](.img/step04a.png)](#nolink)
 
+* After changing the above file, **you must run the following and ensure there are no issues or errors**:
+
+```
+$ sudo apt-get update
+```
+
+* You must rerun the above line if you see any issues like:
+
+```
+.
+.
+.
+1: Network is unreachable) [IP: 93.93.128.193 80]
+E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?
+pi@raspberrypi:~ $ _
+```
+
 ### 4.2. Updates
 
-* We need to update everything on the Pi and install a few new programs that the Craft server is dependent on (a.k.a. dependencies)
+* We need to update everything on the Pi and install a few new programs that the Craft server program is dependent on (a.k.a. dependencies)
 * Copy and paste the entire multi-line block of code after the "`$`" and press ENTER:
    * Coffee break #2: It'll take 10+ mins. and you don't need to babysit this
 
@@ -226,6 +253,16 @@ $ sudo apt-get update && \
   python -m pip install requests
 ```
 
+* **NOTE: If there are issues in the next few steps,** you may have to re-run each line above by itself to confirm they ran successfully
+
+```
+$ sudo apt-get update
+$ sudo apt-get -y upgrade
+$ sudo apt-get -y install git python-pip cmake libglew-dev xorg-dev libcurl4-openssl-dev
+$ sudo apt-get -y build-dep glfw
+$ python -m pip install requests
+```
+
 [Back to Top](#table-of-contents)
 
 --------------------------------------------------------------------------------------------------
@@ -234,38 +271,37 @@ $ sudo apt-get update && \
 
 ### 5.1. Download Craft server
 
-* Download the files for running a Craft server from GitHub (~15 MB)
+* Download the files for running a Craft server from GitHub (~15 MB):
 
 ```
 $ cd ~ && \
-  git clone https://github.com/fogleman/Craft.git && \
-  cd ~/Craft && \
-  cmake .
+  git clone https://github.com/fogleman/Craft.git
 ```
 
 ### 5.2. Build Craft program
 
-* We can now build the Craft program to run on the specific Raspberry Pi Zero W hardware
+* Build the Craft program to run on the specific Raspberry Pi Zero W hardware
+   * Don't worry about any warnings, the program should still be built correctly
    * Coffee break #3: It'll take ~10 mins. and you don't need to babysit this
 
 ```
 $ cd ~/Craft && \
+  cmake . && \
   make && \
-  cd ~/Craft && \
   gcc -std=c99 -O3 -fPIC -shared -o world -I src -I deps/noise deps/noise/noise.c src/world.c
 ```
 
 ### 5.3. Start Craft server
 
-* The server program hosts a persistent, shared world for users (clients) to connect to and play together
-* Once you run the line below, the server program will start displaying events as they happen in the game world (players connecting, logging out, etc.)
+* The server program must be actively running to host a multiplayer world for users (clients) to log into
+* Once you execute the line below, the server program will start running and display events as they happen in the game world (players connecting, logging out, etc.)
 
 ```
 $ cd ~/Craft && \
   python server.py
 ```
 
-* Remember the IP address for the Pi, this IP is the address that clients will connect to within your local area network (LAN)
+* Remember the IP address for the Pi, **this IP is the address that clients will connect to** within your local area network (LAN)
 
 [Back to Top](#table-of-contents)
 
@@ -273,7 +309,87 @@ $ cd ~/Craft && \
 
 ## 6. Craft Client
 
-### 6.1. Registering an account
+### 6.1. Download Craft client
+
+* Download the Craft client for Windows or MacOS here: https://www.michaelfogleman.com/projects/craft/
+* This is a "portable" program (nothing needs to be installed), just extract the ZIP file
+* Run `craft.exe`
+
+### 6.2. Connecting to Craft server
+
+* Once the game starts, press "`T`" and enter "`/online <SERVER IP>`" to connect to your Raspberry Pi Zero Craft server
+   * You will be automatically logged on as "`guest1`"
+   * Currently, guests cannot make changes to the multiplayer world, for details see: [DEFUNCT: Registering a Craft Account](#defunct-registering-a-craft-account)
+
+[![.img/step06ba.png](.img/step06ba.png)](#nolink)
+
+### 6.3. Playing Craft
+
+**CONGRATS! You're done with the tutorial**
+
+Have some fun and build a new world in your own Craft playground:
+
+Button | Action
+--- | ---
+`W`, `A`, `S`, `D` | Movement
+`Left-Mouse` | Destroy block
+`Right-Mouse` | Create block
+`Mouse-Wheel` | Cycle through block types
+`CTRL`+`Right-Mouse` | Create light source
+`T` | Chat
+`/` | Command: Chat but with `/` added
+`ESC` | Mouse control back to OS (to close or maximize/minimize Craft window)
+More controls | https://github.com/fogleman/Craft#controls
+
+### 6.4. Multiplayer vs. single-player
+
+[![.img/step06c.png](.img/step06c.png)](#nolink)
+
+* You can have a single-player experience in Craft without connecting to a server and have your world saved locally on your computer
+* Other players will not be able to connect to your single-player mode world
+* **The only way to have multiplayer in Craft is to connect to a server that is actively running the Craft server program**
+   * In order to make changes to your multiplayer world, you must register for a free Craft account on the author's website
+   * **NOTICE: You cannot register a new Craft account at this time (Jan. 1, 2020). You can still still log onto your server as a "guest" to finish this tutorial**
+   * For details, see [DEFUNCT: Registering a Craft Account](#defunct-registering-a-craft-account)
+
+### 6.5. Cleanup
+
+**After you are done with this tutorial:**
+
+* You can continue to have the server program run as long as you want to play on it
+* You can shut down the server program by pressing `CTRL+C`, then shut down the Pi by executing:
+
+```
+$ sudo shutdown -h now
+```
+
+* **To start the Pi back up**: Physically remove the micro USB power cable from the Pi, wait a few seconds, then plug it back in
+
+[Back to Top](#table-of-contents)
+
+--------------------------------------------------------------------------------------------------
+
+## 7. Next Steps
+
+**We touched on a bunch of different IT tasks here; you're easily on your way to becoming a self-sufficient ["techie"](https://www.merriam-webster.com/dictionary/techie), it just takes a lot of experimenting and completing projects like this**
+
+* Try this tutorial one more time to solidify these concepts
+* Have other people join in at your home network!
+   * What we've setup here, only computers within your local area network (LAN) can connect to your server
+* Learn how to make cloud instances and share your server to the world
+   * WARNING: You should "harden" your server security first before exposing any of your servers to the public internet: [https://www.upguard.com/blog/10-essential-steps-for-configuring-a-new-server](https://www.upguard.com/blog/10-essential-steps-for-configuring-a-new-server)
+* Now that you already have a Raspberry Pi, try some other fun projects: https://projects.raspberrypi.org/en/
+* Trying to go back to sleep at 3AM? Read the official Raspberry Pi starter guide: https://projects.raspberrypi.org/en/pathways/getting-started-with-raspberry-pi
+
+**If you would like to learn more about Bash and command line interface (CLI), please see [Atet's 15 Minute Introduction to Regular Expressions (in Bash)](https://github.com/atet/learn/blob/master/regex/README.md#atet--learn--regex)**
+
+[Back to Top](#table-of-contents)
+
+--------------------------------------------------------------------------------------------------
+
+## DEFUNCT: Registering a Craft Account
+
+**NOTICE: You cannot register a new Craft account at this time (Jan. 1, 2020). You can still still log onto your server as a "guest" to finish this tutorial**
 
 * Even though we made our own sever here, we still need to register an account on the creator of Craft's website: https://craft.michaelfogleman.com/
 
@@ -292,74 +408,14 @@ $ cd ~/Craft && \
 * **Highlight the line and `CTRL`+`C`** (pressing the copy to clipboard button didn't work for me to paste in the game)
 * NOTE: You can only see this key once; if you close this window, you will have to make another key if you need it again
 
-### 6.2. Download Craft client
-
-* Download the Craft client for Windows or MacOS here: https://www.michaelfogleman.com/projects/craft/
-* This is a "portable" program; nothing needs to be installed, just extract the ZIP file
-* Run `craft.exe`
-
-### 6.3. Connecting to Craft server
+### Connecting to Craft server
 
 * Once the game starts, press "`T`" and `CTRL`+`V` to paste in your Identity Token and press ENTER (slash "`/`" in front is used to denote system commands)
 * Press "`T`" and enter "`/online <SERVER IP>`" to connect to your Raspberry Pi Zero Craft server
-   * Once on the server, you should automatically be connected as your account
+   * Once on the server, you should automatically be connected as your account (only if you have registered an account prior to January 1, 2020)
    * The server may accidentally log you off your username after you connect; if it says you are a "guest", you must re-login: "`/login <USERNAME>`"
 
 [![.img/step06b.png](.img/step06b.png)](#nolink)
-
-### 6.4. Playing Craft
-
-**CONGRATS! You're done with the tutorial**
-
-Have some fun and build a new world in your own Craft playground:
-
-Button | Action
---- | ---
-`W`, `A`, `S`, `D` | Movement
-`Left-Mouse` | Destroy block
-`Right-Mouse` | Create block
-`Mouse-Wheel` | Cycle through block types
-`CTRL`+`Right-Mouse` | Create light source
-`T` | Chat
-`/` | Command: Chat but with `/` added
-`ESC` | Mouse control back to OS (to close or maximize/minimize Craft window)
-More controls | https://github.com/fogleman/Craft#controls
-
-### 6.5. Multiplayer vs. single-player
-
-[![.img/step06c.png](.img/step06c.png)](#nolink)
-
-* You can have a single-player experience in Craft without connecting to a server and have your world saved locally on your computer
-* Other players will not be able to connect to your world in single-player mode
-* The only way to have multiplayer in Craft is to connect to a server that is running the Craft server program
-
-### 6.6. Cleanup
-
-**After you are done with this tutorial:**
-
-* You can continue to have the server program run as long as you want to play on it
-* You can shut down the server program by pressing `CTRL+C`, then shut down the Pi by executing:
-
-```
-$ sudo shutdown -h now
-```
-
-[Back to Top](#table-of-contents)
-
---------------------------------------------------------------------------------------------------
-
-## 7. Next Steps
-
-**We touched on a bunch of different IT tasks here; you're easily on your way to becoming a self-sufficient ["techie"](https://www.merriam-webster.com/dictionary/techie), it just takes a lot of experimenting and completing projects like this**
-
-* Have other people join in at your home network!
-   * What we've setup here, only computers within your local area network (LAN) can connect to your server
-* Learn how to make cloud instances and share your server to the world
-   * WARNING: You should "harden" your server security first before exposing any of your servers to the public internet: [https://www.upguard.com/blog/10-essential-steps-for-configuring-a-new-server](https://www.upguard.com/blog/10-essential-steps-for-configuring-a-new-server)
-* Now that you already have a Raspberry Pi, try some other fun projects: https://projects.raspberrypi.org/en/
-* Trying to go back to sleep at 3AM? Read the official Raspberry Pi starter guide: https://projects.raspberrypi.org/en/pathways/getting-started-with-raspberry-pi
-
-**If you would like to learn more about Bash and command line interface (CLI), please see [Atet's 15 Minute Introduction to Regular Expressions (in Bash)](https://github.com/atet/learn/blob/master/regex/README.md#atet--learn--regex)**
 
 [Back to Top](#table-of-contents)
 
@@ -397,12 +453,36 @@ Official Raspberry Pi Project Ideas | https://projects.raspberrypi.org/en/
 Issue | Solution
 --- | ---
 I don't need a password to use my WiFi | If you administer your own "open" network that does not require a password, **you should secure your network ASAP**: [https://lifehacker.com/how-to-make-your-wifi-router-as-secure-as-possible-1827695547](https://lifehacker.com/how-to-make-your-wifi-router-as-secure-as-possible-1827695547)
-Cannot access micro SD card `boot` drive after OS image burn | Must have formatted the card (to have a partition) **BEFORE** burning the Raspbian image to the card; repeat steps 1-3 in [2.2. Prepare Micro SD Card](#22-prepare-micro-sd-card)
-Reformatted micro SD card's free space is **less** than before | Multiple partitions may exist on card from a previous OS burn; erase all partitions before formatting as **one partition**
-Cannot find Pi's IP address | _Did the Pi actually connect to your WiFi network successfully?_ Go back and verify `wpa_supplicant.conf` or confirm you have permission to connect new devices to your network<br><br>You can also verify connection status and the assigned IP address by connecting to the Pi _locally_ (see below)  
+Cannot access micro SD card `boot` drive after OS image burn | Mount the newly created "`boot`" drive in Windows Disk Management, instructions here: [Mounting `boot` Drive in Windows Disk Management](#mounting-boot-drive-in-windows-disk-management)
+Reformatted micro SD card's free space is **less** than before | Multiple partitions may exist on card from a previous OS burn; proceed to burn image with Rufus again and Rufus will automatically erase all partitions on the SD card
+Cannot find Pi's IP address | _Did the Pi actually connect to your WiFi network successfully?_ Go back and verify `wpa_supplicant.conf` or confirm you have permission to connect new devices to your network<br><br>You can also verify connection status and the assigned IP address by connecting to the Pi _locally_: [Advanced Connection Methods for Headless Raspberry Pi](#advanced-connection-methods-for-headless-raspberry-pi)
+`git` will not download the Craft files | `git` will not download files if there is already a directory with the name "`Craft`", if you previously performed the `git` step and needed to redo it, you must first delete the existing "`Craft`" directory with:<br><br>`$ rm -rf ~/Craft`
 Player camera slowly looks up automatically | Bug? I had this issue when the game is maximized to fullscreen or the window was expanded outside the limits of the screen; just play windowed if this happens
+"`Only logged in users are allowed to build`": Cannot make changes to multiplayer world | In order to make changes to your multiplayer world, you must register for a free Craft account on the author's website, see: [DEFUNCT: Registering a Craft Account](#defunct-registering-a-craft-account)
 
-### **Advanced methods to connect to a headless Raspberry Pi**
+### **Mounting `boot` Drive in Windows Disk Management**
+
+* If you do not see "`boot`" as the new name given to your freshly burned SD card (such as in the red box below), you will not be able to access it through File Explorer for step [2.3. Access New `boot` Drive](#23-access-new-boot-drive)
+* Physically remove your SD card from your computer, wait a few seconds, then reinsert
+* **Press "Cancel"** when Windows prompts you to reformat the card
+
+[![.img/ta.png](.img/ta.png)](#nolink)
+
+* Press the Windows key and search for "disk management"
+* Click on "Create and format hard disk partitions" which will open the Windows Disk Management program
+* In the bottom windows pane, find your micro SD card
+* Right-click on the 'boot' partition and select "Change Drive Letter and Paths..."
+
+[![.img/tb.png](.img/tb.png)](#nolink)
+
+* Click on "Add"
+* Windows will automatically choose a drive letter that is not used, your may be different than what's seen here
+* Press "OK" and you will see that Windows has mounted your new SD card `boot` partition (see red boxes below)
+* You can now open and navigate this `boot` drive in Windows File Explorer and continue with step [2.3. Access New `boot` Drive](#23-access-new-boot-drive)
+
+[![.img/tc.png](.img/tc.png)](#nolink)
+
+### **Advanced Connection Methods for Headless Raspberry Pi**
 
 ### Connecting via USB cable
 
@@ -415,7 +495,7 @@ If you **do not** have access to your network's router but have USB and HDMI ada
    * You need an HDMI compatible TV or monitor
    * Adapters for micro USB (Male) to USB-A (Female) and Mini HDMI (Male) to HDMI (Female)
 
-   [![.img/step03a.png](.img/step03a.png)](#nolink)
+   [![.img/td.png](.img/td.png)](#nolink)
 
    * Connect a USB keyboard and HDMI monitor to the Pi using the adapters
    * Login as default username `pi` and password `raspberry`
@@ -424,7 +504,7 @@ If you **do not** have access to your network's router but have USB and HDMI ada
       * Find the IP address after `inet`
       * If the Pi did not successfully connect to your network, there will not be an IP address shown
 
-   [![.img/step03b.png](.img/step03b.png)](#nolink)
+   [![.img/te.png](.img/te.png)](#nolink)
 
 [Back to Top](#table-of-contents)
 
