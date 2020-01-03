@@ -20,7 +20,7 @@
 * [1. _Game_ Plan](#1-game-plan)
 * [2. Installation](#2-installation)
 * [3. Connection](#3-connection)
-* [4. Setup](#4-setup)
+* [4. Updating](#4-updating)
 * [5. Craft Server](#5-craft-server)
 * [6. Craft Client](#6-craft-client)
 * [7. Next Steps](#7-next-steps)
@@ -185,6 +185,21 @@ network={
 
 ## 3. Connection
 
+**IMPORTANT: The only thing you need to know about CLI for this tutorial is that copy/paste is really odd in terminal:**
+
+* Copy from outside of terminal (e.g. webpage) to paste in terminal: 
+   * Copy: Highlight text and right-click+Copy or CTRL+C
+   * Paste: Move text cursor (not mouse pointer) to where you want to paste and right-click
+
+[![.img/step03a.png](.img/step03a.png)](#nolink)
+
+* Copy from within terminal to paste in terminal:
+   * Copy: Highlight text and right-click
+   * Paste: Move text cursor (not mouse pointer) to where you want to paste and right-click
+* Copy from within terminal to paste outside of terminal (e.g. Notepad):
+   * Copy: Highlight text and right-click
+   * Paste: Right-click+Paste or CTRL+V
+
 ### 3.1. Determining the IP address of your headless Raspberry Pi
 
 * Press the Windows key and search for "command" and open **Command Prompt**
@@ -192,17 +207,18 @@ network={
    * This operation will not work in WSL Bash, only Windows Command Prompt
    * If the above fails or you are not using Windows, see: [Advanced Connection Methods for Headless Raspberry Pi](#advanced-connection-methods-for-headless-raspberry-pi)
 
-   [![.img/step031a.png](.img/step031a.png)](#nolink)
+[![.img/step031a.png](.img/step031a.png)](#nolink)
 
 ### 3.2. Remote connection to Raspberry Pi
 
 * Press the Windows key and search for "ubuntu" and open **Ubuntu 18.04 LTS**
 * In Ubuntu Bash, execute "`ssh pi@<PI'S IP ADDRESS>`"
    * You may get a warning of "`The authenticity of host...`", just answer "`yes`"
+   * If you get "`WARNING: REMOTE HOST IDENTIFICATION...`", just follow the directions and reset with "`ssh-keygen -f...`"
    * Use the default password "`raspberry`" and press Enter
       * Typing the password will be invisible for security
 
-   [![.img/step03c.png](.img/step03c.png)](#nolink)
+[![.img/step03c.png](.img/step03c.png)](#nolink)
 
 **After you successfully log in and see "`pi@raspberrypi:~ $ _`", all the hard work is now done**
 
@@ -212,7 +228,7 @@ network={
 
 --------------------------------------------------------------------------------------------------
 
-## 4. Setup
+## 4. Updating
 
 ### 4.1. Add update source
 
@@ -227,7 +243,7 @@ $ sudo nano /etc/apt/sources.list
    * Press `CTRL+O` then `ENTER` to save file
    * Press `CTRL+X` to exit this text editor
 
-   [![.img/step04a.png](.img/step04a.png)](#nolink)
+[![.img/step04a.png](.img/step04a.png)](#nolink)
 
 * After changing the above file, **you must run the following command and ensure there are no issues or errors**:
 
@@ -236,26 +252,39 @@ $ sudo apt-get update
 ```
 
 * You must re-run the above line if you see any issues like:
+   * If this error keeps occuring, the update servers may be having issues; try again later
 
 ```
-.
-.
-.
 1: Network is unreachable) [IP: 93.93.128.193 80]
 E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?
 pi@raspberrypi:~ $ _
 ```
 
-### 4.2. Updates
+### 4.2. Update to latest version
 
-* We need to install a few new programs that the Craft server program is dependent on (a.k.a. dependencies)
 * Copy and paste the entire multi-line command after the "`$`" and press ENTER:
+   * It's best practice to run "`sudo apt-get update`" before installing anything new to confirm you will download the latest versions
    * Coffee break #3: This will take 10+ mins. and you don't need to babysit this
 
 ```
 $ sudo apt-get update && \
-  sudo apt-get -y upgrade && \
-  sudo apt-get -y install git python-pip cmake libglew-dev xorg-dev libcurl4-openssl-dev && \
+  sudo apt-get -y upgrade
+```
+
+[Back to Top](#table-of-contents)
+
+--------------------------------------------------------------------------------------------------
+
+## 5. Craft Server
+
+### 5.1. Download Craft server dependencies
+
+* We need to install a few new programs that the Craft server program is dependent on (a.k.a. dependencies)
+* Copy and paste the entire multi-line command after the "`$`" and press ENTER:
+   * Coffee break #4: This will take 10+ mins. and you don't need to babysit this
+
+```
+$  sudo apt-get -y install git python-pip cmake libglew-dev xorg-dev libcurl4-openssl-dev && \
   sudo apt-get -y build-dep glfw && \
   python -m pip install requests
 ```
@@ -270,13 +299,7 @@ $ sudo apt-get -y build-dep glfw
 $ python -m pip install requests
 ```
 
-[Back to Top](#table-of-contents)
-
---------------------------------------------------------------------------------------------------
-
-## 5. Craft Server
-
-### 5.1. Download Craft server
+### 5.2. Download Craft server program
 
 * Download the files for running a Craft server from GitHub (~15 MB):
 
@@ -285,10 +308,10 @@ $ cd ~ && \
   git clone https://github.com/fogleman/Craft.git
 ```
 
-### 5.2. Build Craft program
+### 5.3. Build Craft server program
 
 * Build the Craft program to run on the Raspberry Pi Zero W
-   * Coffee break #4: This will take ~10 mins. and you don't need to babysit this
+   * Coffee break #5: This will take ~10 mins. and you don't need to babysit this
    * There may be some warnings, but the program should build correctly if everything from step 4.2. was successful
 
 ```
@@ -298,7 +321,7 @@ $ cd ~/Craft && \
   gcc -std=c99 -O3 -fPIC -shared -o world -I src -I deps/noise deps/noise/noise.c src/world.c
 ```
 
-### 5.3. Start Craft server
+### 5.4. Start Craft server program
 
 * The Craft server program must be actively running to host a multiplayer world for users (clients) to log into
 * Once you execute the line below, the server program will start running and display events as they happen in the game world (players connecting, players logging out, etc.)
@@ -316,7 +339,7 @@ $ cd ~/Craft && \
 
 ## 6. Craft Client
 
-### 6.1. Download Craft client
+### 6.1. Download Craft client program
 
 * Download the Craft client for Windows or MacOS here: https://www.michaelfogleman.com/projects/craft/
    * This is a "portable" program (nothing needs to be installed), just extract the ZIP file
@@ -464,6 +487,8 @@ Cannot access micro SD card `boot` drive after OS image burn | Mount the newly c
 Reformatted micro SD card's free space is **less** than before | Multiple partitions may exist on card from a previous OS burn; proceed to burn image with Rufus again and Rufus will automatically erase all partitions on the SD card
 Cannot find Pi's IP address | _Did the Pi actually connect to your WiFi network successfully?_ Go back and verify `wpa_supplicant.conf` or confirm you have permission to connect new devices to your network<br><br>You can also verify connection status and the assigned IP address by connecting to the Pi _locally_: [Advanced Connection Methods for Headless Raspberry Pi](#advanced-connection-methods-for-headless-raspberry-pi)
 `Permission denied` while attempting to log into Pi | Make sure you login as the user "`pi`", i.e. "`ssh pi@<PI'S IP ADDRESS>`"
+`WARNING: REMOTE HOST IDENTIFICATION...` | This means another computer had this same IP address; if this is not an issue, follow the directions given on-screen
+The wrong text is pasting in terminal | Copying and pasting into terminal is an art: Once you copy something, you must make sure you don't accidentally copy something else in the terminal before you right-click paste (e.g. blank space, different text, etc.)
 `git` will not download the Craft files | `git` will not download files if there is already a directory with the name "`Craft`", if you previously performed the `git` step and needed to redo it, you must first delete the existing "`Craft`" directory with:<br><br>`$ rm -rf ~/Craft`
 Craft client closes when attempting to log into multiplayer server | Craft server program must be running on the Raspberry Pi server
 Player camera slowly looks up automatically | Bug? I had this issue when the game is maximized to fullscreen or the window was expanded outside the limits of the screen; just play windowed if this happens
@@ -472,8 +497,8 @@ Player camera slowly looks up automatically | Bug? I had this issue when the gam
 ### **Mounting `boot` Drive in Windows Disk Management**
 
 * If you do not see "`boot`" as the new name given to your freshly burned SD card (such as in the red box below), you will not be able to access it through File Explorer for step [2.3. Access New `boot` Drive](#23-access-new-boot-drive)
-* Physically remove your SD card from your computer, wait a few seconds, then reinsert
-* **Press "Cancel"** when Windows prompts you to reformat the card
+* **IMPORTANT**: Physically remove your SD card from your computer, wait a few seconds, then reinsert
+   * **Press "Cancel"** when Windows prompts you to reformat the card
 
 [![.img/ta.png](.img/ta.png)](#nolink)
 
