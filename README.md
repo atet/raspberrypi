@@ -42,7 +42,7 @@
 ### Software
 
 * Windows: This tutorial was developed on Microsoft Windows 10 with Windows Subsystem for Linux (WSL)
-   * You must install WSL so Windows can communicate with Linux on the Raspberry Pi
+   * **You must install WSL** so Windows can communicate with Linux on the Raspberry Pi
    * WSL is a fully supported Microsoft product for Windows 10; learn how to install it here: [https://docs.microsoft.com/en-us/windows/wsl/install-win10](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
    * Use "Ubuntu 18.04 LTS" distribution
    * This may take 10+ minutes and require a reboot
@@ -106,18 +106,19 @@
 
 * Download the latest **Raspbian Linux Lite** image from: [https://www.raspberrypi.org/downloads/raspbian/](https://www.raspberrypi.org/downloads/raspbian/)
    * Make sure you download the "Lite" version
-   * Extract the ZIP folder once the image is downloaded to get the IMG file
+   * You do not need to extract the ZIP file
 
 [![.img/step02a.png](.img/step02a.png)](#nolink)
 
 ### 2.2. Burn OS Image on Micro SD Card
 
 * Download Rufus Portable v3.8: [https://rufus.ie/](https://rufus.ie/)
-* Select your micro SD card as the device, choose the Raspbian image, and Start burning
+* Select your micro SD card as the device
+* Choose the Raspbian ZIP image and `START` the burn
    * Coffee Break: This will take ~10 mins and you don't need to babysit
-* **You must check if the new drive is called "`boot`" (red box below) once the image is done burning**
+* **You must confirm the new drive is named "`boot`" (red box below) once complete**
    * If not, see: [Mounting `boot` Drive in Windows Disk Management](#mounting-boot-drive-in-windows-disk-management)
-* You can just close Rufus when done
+* You can just `CLOSE` Rufus when done
 
 [![.img/step02b.png](.img/step02b.png)](#nolink)
 
@@ -161,8 +162,7 @@ network={
 ```
 
 * Copy and paste the above, changing "`ssid`" and "`psk`" to match your network's name and password and save
-   * If your WiFi network is hidden, you must use the line "`scan_ssid=1`"
-   * Change the country code as appropriate
+* **If your WiFi network is hidden**, you must use the line "`scan_ssid=1`"
 
 **After you add these two files, safely eject your prepared micro SD card**
 
@@ -200,6 +200,8 @@ network={
    * Copy: Highlight text and right-click
    * Paste: Right-click+Paste or CTRL+V
 
+**Troubleshooting: If nothing or the wrong text is pasting, try to copy and paste again**
+
 ### 3.1. Determining the IP address of your headless Raspberry Pi
 
 * Press the Windows key and search for "command" and open **Command Prompt**
@@ -214,9 +216,9 @@ network={
 * Press the Windows key and search for "ubuntu" and open **Ubuntu 18.04 LTS**
 * In Ubuntu Bash, execute "`ssh pi@<PI'S IP ADDRESS>`"
    * You may get a warning of "`The authenticity of host...`", just answer "`yes`"
-   * If you get "`WARNING: REMOTE HOST IDENTIFICATION...`", just follow the directions and reset with "`ssh-keygen -f...`"
-   * Use the default password "`raspberry`" and press Enter
-      * Typing the password will be invisible for security
+   * If you get "`WARNING: REMOTE HOST IDENTIFICATION...`", just follow the directions given
+* Use the default password "`raspberry`" and press Enter
+   * Typing the password will be invisible for security
 
 [![.img/step03c.png](.img/step03c.png)](#nolink)
 
@@ -239,20 +241,31 @@ network={
 $ sudo nano /etc/apt/sources.list
 ```
 
-* Remove "`#`" in front of: `deb-src http://raspbian...`
+* Remove "`#`" in front of: "`deb-src http://raspbian...`"
    * Press `CTRL+O` then `ENTER` to save file
    * Press `CTRL+X` to exit this text editor
 
 [![.img/step04a.png](.img/step04a.png)](#nolink)
 
-* After changing the above file, **you must run the following command and ensure there are no issues or errors**:
+* After changing the above file, run "`sudo apt-get update`"
+* The command should run successfully like this:
 
 ```
-$ sudo apt-get update
+pi@raspberrypi:~ $ sudo apt-get update
+Get:1 http://archive.raspberrypi.org/debian buster InRelease [25.2 kB]
+Get:2 http://raspbian.raspberrypi.org/raspbian buster InRelease [15.0 kB]
+Get:3 http://archive.raspberrypi.org/debian buster/main armhf Packages [260 kB]
+Get:4 http://raspbian.raspberrypi.org/raspbian buster/rpi Sources [1,132 B]
+Get:5 http://raspbian.raspberrypi.org/raspbian buster/main Sources [11.4 MB]
+Get:6 http://raspbian.raspberrypi.org/raspbian buster/contrib Sources [78.5 kB]
+Get:7 http://raspbian.raspberrypi.org/raspbian buster/non-free Sources [139 kB]
+Get:8 http://raspbian.raspberrypi.org/raspbian buster/main armhf Packages [13.0 MB]
+Fetched 24.9 MB in 53s (473 kB/s)
+Reading package lists... Done
+pi@raspberrypi:~ $ _
 ```
 
-* You must re-run the above line if you see any issues like:
-   * If this error keeps occuring, the update servers may be having issues; try again later
+* **IMPORTANT**: You must rerun "`sudo apt-get update`" if you see any issues like:
 
 ```
 1: Network is unreachable) [IP: 93.93.128.193 80]
@@ -260,11 +273,14 @@ E: Unable to fetch some archives, maybe run apt-get update or try with --fix-mis
 pi@raspberrypi:~ $ _
 ```
 
+* If this error keeps occuring, the update servers may be having issues; try again later
+* **This command must run successfully before continuing this tutorial**
+
 ### 4.2. Update to latest version
 
 * Copy and paste the entire multi-line command after the "`$`" and press ENTER:
-   * It's best practice to run "`sudo apt-get update`" before installing anything new to confirm you will download the latest versions
-   * Coffee break #3: This will take 10+ mins. and you don't need to babysit this
+   * It's best practice to re-run "`sudo apt-get update`" everytime you're about to install anything new
+   * Coffee break #3: This will take ~20 mins. and you don't need to babysit this
 
 ```
 $ sudo apt-get update && \
@@ -289,19 +305,19 @@ $  sudo apt-get -y install git python-pip cmake libglew-dev xorg-dev libcurl4-op
   python -m pip install requests
 ```
 
-* **NOTE: If there are issues in the next few steps,** you may have to come back here and re-run each line above by itself and confirm they executed successfully
+* **IMPORTANT**: If there are issues in the next few steps, you may have to re-run each line from above one-by-one and confirm they executed successfully:
 
-```
-$ sudo apt-get update
-$ sudo apt-get -y upgrade
-$ sudo apt-get -y install git python-pip cmake libglew-dev xorg-dev libcurl4-openssl-dev
-$ sudo apt-get -y build-dep glfw
-$ python -m pip install requests
-```
+   ```
+   $ sudo apt-get update
+   $ sudo apt-get -y upgrade
+   $ sudo apt-get -y install git python-pip cmake libglew-dev xorg-dev libcurl4-openssl-dev
+   $ sudo apt-get -y build-dep glfw
+   $ python -m pip install requests
+   ```
 
 ### 5.2. Download Craft server program
 
-* Download the files for running a Craft server from GitHub (~15 MB):
+* Download the files for running a Craft server from GitHub:
 
 ```
 $ cd ~ && \
@@ -321,7 +337,21 @@ $ cd ~/Craft && \
   gcc -std=c99 -O3 -fPIC -shared -o world -I src -I deps/noise deps/noise/noise.c src/world.c
 ```
 
-### 5.4. Start Craft server program
+### 5.4. Modify Craft server program
+
+* Modify the following file to allow clients to build in the multiplayer world:
+
+```
+$ cd ~/Craft && nano server.py
+```
+
+* Change line 25 from "`True`" to "`False`"
+   * Press `CTRL+O` then `ENTER` to save file
+   * Press `CTRL+X` to exit this text editor
+
+[![.img/step05a.png](.img/step05a.png)](#nolink)
+
+### 5.5. Start Craft server program
 
 * The Craft server program must be actively running to host a multiplayer world for users (clients) to log into
 * Once you execute the line below, the server program will start running and display events as they happen in the game world (players connecting, players logging out, etc.)
@@ -355,10 +385,7 @@ $ cd ~/Craft && \
 
 **CONGRATS! You're done with the tutorial**
 
-* You will be automatically logged on as a guest when you connect to your Craft server
-   * Currently, **guests cannot make changes to the multiplayer world**, for details see: [DEFUNCT: Registering a Craft Account](#defunct-registering-a-craft-account)
-* **Switch back to single-player mode** by pressing "`T`" and enter "`/offline`"
-   * Have some fun and build a new world in your own Craft playground:
+* Have some fun and build a new world in your own Craft playground:
 
 Button | Action
 --- | ---
@@ -374,13 +401,15 @@ More controls | https://github.com/fogleman/Craft#controls
 
 ### 6.4. Multiplayer vs. single-player
 
+* **The only way to have multiplayer in Craft is to connect to a server that is actively running the Craft server program**
+
 [![.img/step06c.png](.img/step06c.png)](#nolink)
 
+
+* **Switch back to single-player mode from multiplayer** by pressing "`T`" and enter "`/offline`"
 * You can have a single-player experience in Craft without connecting to a server and have your world saved locally on your computer
 * Other players will not be able to connect to your single-player mode world
-* **The only way to have multiplayer in Craft is to connect to a server that is actively running the Craft server program**
-   * In order to make changes to your multiplayer world, you must register for a free Craft account on the author's website
-   * **NOTICE: You cannot register a new Craft account at this time (Jan. 1, 2020)** for details, see [DEFUNCT: Registering a Craft Account](#defunct-registering-a-craft-account)
+
 
 ### 6.5. Cleanup
 
@@ -393,7 +422,7 @@ More controls | https://github.com/fogleman/Craft#controls
 $ sudo shutdown -h now
 ```
 
-* **To start the Pi back up**: Physically remove the micro USB power cable from the Pi, wait a few seconds, then plug it back in
+* **To start the Pi back up after shutdown**: Physically remove the micro USB power cable from the Pi, wait a few seconds, then plug it back in
 
 [Back to Top](#table-of-contents)
 
@@ -419,8 +448,10 @@ $ sudo shutdown -h now
 
 ## DEFUNCT: Registering a Craft Account
 
-**NOTICE: You cannot register a new Craft account at this time (Jan. 1, 2020). You can still still log onto your server as a "guest" to finish this tutorial**
+**We have bypassed this requirement by modifying the `server.py` file in step [5.4. Modify Craft server program](#54-modify-craft-server-program)**
 
+* **NOTICE: You cannot register a new Craft account at this time (Jan. 1, 2020)**
+* You can still still log onto your server as a "guest"
 * Even though we made our own sever here, we still need to register an account on the creator of Craft's website: https://craft.michaelfogleman.com/
 
 > "Why register?
@@ -496,23 +527,24 @@ Player camera slowly looks up automatically | Bug? I had this issue when the gam
 
 ### **Mounting `boot` Drive in Windows Disk Management**
 
-* If you do not see "`boot`" as the new name given to your freshly burned SD card (such as in the red box below), you will not be able to access it through File Explorer for step [2.3. Access New `boot` Drive](#23-access-new-boot-drive)
-* **IMPORTANT**: Physically remove your SD card from your computer, wait a few seconds, then reinsert
+* If you **don't** see "`boot`" as name given to your freshly burned SD card (red box below), you will not be able to access it for step [2.3. Access New `boot` Drive](#23-access-new-boot-drive)
+1. `CLOSE` Rufus
+2. **IMPORTANT**: Physically remove your SD card from your computer, wait a few seconds, then reinsert
    * **Press "Cancel"** when Windows prompts you to reformat the card
 
 [![.img/ta.png](.img/ta.png)](#nolink)
 
-* Press the Windows key and search for "disk management"
-* Click on "Create and format hard disk partitions" which will open the Windows Disk Management program
-* In the bottom windows pane, find your micro SD card
-* Right-click on the "`boot`" partition and select "Change Drive Letter and Paths..."
+3. Press the Windows key and search for "disk management"
+4. Click on "Create and format hard disk partitions" which will open the Windows Disk Management program
+5. In the bottom windows pane, find your micro SD card
+6. Right-click on the "`boot`" partition and select "Change Drive Letter and Paths..."
+7. In the popup window, click on "`Add`"
 
 [![.img/tb.png](.img/tb.png)](#nolink)
 
-* Click on "Add"
-* Windows will automatically choose a drive letter that is not used, your may be different than what's seen here
-* Press "OK" and you will see that Windows has mounted your new SD card "`boot`" partition (see red boxes below)
-* You can now open and navigate this "`boot`" drive in Windows File Explorer and continue with step [2.3. Access New `boot` Drive](#23-access-new-boot-drive)
+8. Another popup window will appear and Windows will automatically select a drive letter that is unused (yours may be a different letter)
+9. Press "`OK`" and Windows will mount your SD card's "`boot`" partition (red boxes below)
+10. You can now open this "`boot`" drive in Windows File Explorer and continue with step [2.3. Access New `boot` Drive](#23-access-new-boot-drive)
 
 [![.img/tc.png](.img/tc.png)](#nolink)
 
