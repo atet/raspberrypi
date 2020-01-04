@@ -362,6 +362,7 @@ $ cd ~/Craft && \
 ```
 
 * Remember the IP address for the Pi, **this IP is the address that clients will connect to** within your local area network (LAN)
+* With the Craft server program running, move on to the next section
 
 [Back to Top](#table-of-contents)
 
@@ -385,7 +386,7 @@ $ cd ~/Craft && \
 
 **CONGRATS! You're done with the tutorial**
 
-* Have some fun and build a new world in your own Craft playground:
+* Have fun and build a whole new world in your own Craft playground:
 
 Button | Action
 --- | ---
@@ -521,8 +522,8 @@ Cannot find Pi's IP address | _Did the Pi actually connect to your WiFi network 
 `WARNING: REMOTE HOST IDENTIFICATION...` | This means another computer had this same IP address; if this is not an issue, follow the directions given on-screen
 The wrong text is pasting in terminal | Copying and pasting into terminal is an art: Once you copy something, you must make sure you don't accidentally copy something else in the terminal before you right-click paste (e.g. blank space, different text, etc.)
 `git` will not download the Craft files | `git` will not download files if there is already a directory with the name "`Craft`", if you previously performed the `git` step and needed to redo it, you must first delete the existing "`Craft`" directory with:<br><br>`$ rm -rf ~/Craft`
-Craft client closes when attempting to log into multiplayer server | Craft server program must be running on the Raspberry Pi server
-Player camera slowly looks up automatically | Bug? I had this issue when the game is maximized to fullscreen or the window was expanded outside the limits of the screen; just play windowed if this happens
+Craft client crashes/closes when attempting to log into multiplayer server | Craft server program must be running on the Raspberry Pi server; confirm correct IP address typed and try again
+Player camera slowly looks up automatically | Bug when game is maximized to fullscreen; just play windowed if this happens or rebuild from scratch: https://github.com/fogleman/Craft/issues?utf8=%E2%9C%93&q=cursor
 "`Only logged in users are allowed to build`": Cannot make changes to multiplayer world | In order to make changes to your multiplayer world, you must register for a free Craft account on the author's website, see: [DEFUNCT: Registering a Craft Account](#defunct-registering-a-craft-account)
 
 ### **Mounting `boot` Drive in Windows Disk Management**
