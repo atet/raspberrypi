@@ -1,4 +1,4 @@
-# [atet](https://github.com/atet) / [learn](https://github.com/atet/learn) / [**_raspberrypi_**](https://github.com/atet/learn/tree/master/raspberrypi)
+# [atet](https://github.com/atet) / [learn](https://github.com/atet/learn/blob/master/README.md#atet--learn) / [**_raspberrypi_**](https://github.com/atet/learn/blob/master/raspberrypi/README.md#atet--learn--raspberrypi)
 
 [![.img/logo_raspberrypi.png](.img/logo_raspberrypi.png)](#nolink)
 
