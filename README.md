@@ -27,10 +27,10 @@
 
 ### Supplemental
 
-* [DEFUNCT: Registering a Craft Account](#defunct-registering-a-craft-account)
 * [Why Raspberry Pi?](#why-raspberry-pi)
 * [Other Resources](#other-resources)
 * [Troubleshooting](#troubleshooting)
+* [DEFUNCT: Registering a Craft Account](#defunct-registering-a-craft-account)
 * [Acknowledgments](#acknowledgments)
 
 --------------------------------------------------------------------------------------------------
@@ -76,7 +76,7 @@
 * Connect to WiFi using only the network name (a.k.a. SSID) and password
    * Some networks may require additional registration for new devices, like a school or public hotspot; consult your IT department about adding your Pi
 * Disabled ["wireless isolation" (a.k.a. AP isolation, station isolation, or client isolation)](https://www.howtogeek.com/179089/lock-down-your-wi-fi-network-with-your-routers-wireless-isolation-option/)
-   * There is no compromise on this one; if wireless isolation is not disabled on your network, you will not be able to connect to your Pi through WiFi
+   * **You will not be able to connect to your Pi through WiFi** if this is not disabled on your network
 
 **Once you have everything here, you're ready to go!**
 
@@ -302,7 +302,8 @@ $ sudo apt-get update && \
    * Coffee break #4: This will take 10+ mins. and you don't need to babysit this
 
 ```
-$  sudo apt-get -y install git python-pip cmake libglew-dev xorg-dev libcurl4-openssl-dev && \
+$ sudo apt-get -y install git python-pip cmake libglew-dev \
+  xorg-dev libcurl4-openssl-dev && \
   sudo apt-get -y build-dep glfw && \
   python -m pip install requests
 ```
@@ -312,7 +313,8 @@ $  sudo apt-get -y install git python-pip cmake libglew-dev xorg-dev libcurl4-op
    ```
    $ sudo apt-get update
    $ sudo apt-get -y upgrade
-   $ sudo apt-get -y install git python-pip cmake libglew-dev xorg-dev libcurl4-openssl-dev
+   $ sudo apt-get -y install git python-pip cmake libglew-dev \
+     xorg-dev libcurl4-openssl-dev
    $ sudo apt-get -y build-dep glfw
    $ python -m pip install requests
    ```
@@ -336,7 +338,8 @@ $ cd ~ && \
 $ cd ~/Craft && \
   cmake . && \
   make && \
-  gcc -std=c99 -O3 -fPIC -shared -o world -I src -I deps/noise deps/noise/noise.c src/world.c
+  gcc -std=c99 -O3 -fPIC -shared -o world -I src -I \
+  deps/noise deps/noise/noise.c src/world.c
 ```
 
 ### 5.4. Modify Craft server program
@@ -443,50 +446,10 @@ $ sudo shutdown -h now
 **We touched on a bunch of different IT tasks here; you're easily on your way to becoming a self-sufficient ["techie"](https://www.merriam-webster.com/dictionary/techie), it just takes a lot of experimenting and completing projects like this**
 
 * Try this tutorial one more time to solidify these concepts
-* Have other people join in at your home network!
-   * What we've setup here, only computers within your local area network (LAN) can connect to your server
+* Have other people join in at your home local area network (LAN)
 * **I highly recommend continuing with another mini project: [Atet's 15 Minute Introduction to Network Attached Storage](https://github.com/atet/learn/blob/master/nas/README.md#atet--learn--nas)**
-* **If you would like to learn more about Bash and command line interface (CLI), please see [Atet's 15 Minute Introduction to Regular Expressions (in Bash)](https://github.com/atet/learn/blob/master/regex/README.md#atet--learn--regex)**
-* Learn how to make cloud instances and share your Craft server to the world
-   * WARNING: You should "harden" your server security first before exposing any of your servers to the public internet: [https://www.upguard.com/blog/10-essential-steps-for-configuring-a-new-server](https://www.upguard.com/blog/10-essential-steps-for-configuring-a-new-server)
-* Now that you already have a Raspberry Pi, try some other fun projects: https://projects.raspberrypi.org/en/
-* Trying to go back to sleep at 3AM? Read the official Raspberry Pi starter guide: https://projects.raspberrypi.org/en/pathways/getting-started-with-raspberry-pi
-
-[Back to Top](#table-of-contents)
-
---------------------------------------------------------------------------------------------------
-
-## DEFUNCT: Registering a Craft Account
-
-**We have bypassed this requirement by modifying the `server.py` file in step [5.4. Modify Craft server program](#54-modify-craft-server-program)**
-
-* **NOTICE: You cannot register a new Craft account at this time (Jan. 1, 2020)**
-* You can still still log onto your server as a "guest"
-* Even though we made our own sever here, we still need to register an account on the creator of Craft's website: https://craft.michaelfogleman.com/
-
-> "Why register?
->
-> You can play on most game servers anonymously. **However, without registering you will not be able to make changes in most areas of the world**."
-
-* After you register and verify your email address, log back into https://craft.michaelfogleman.com/ and make an Identity Token, it should look similar to:
-
-```
-/identity <USERNAME> 0123456789abcdef0123456789abcdef
-```
-
-[![.img/step06a.png](.img/step06a.png)](#nolink)
-
-* **Highlight the line and `CTRL`+`C`** (pressing the copy to clipboard button didn't work for me to paste in the game)
-* NOTE: You can only see this key once; if you close this window, you will have to make another key if you need it again
-
-### Connecting to Craft server
-
-* Once the game starts, press "`T`" and `CTRL`+`V` to paste in your Identity Token and press ENTER (slash "`/`" in front is used to denote system commands)
-* Press "`T`" and enter "`/online <SERVER IP>`" to connect to your Raspberry Pi Zero Craft server
-   * Once on the server, you should automatically be connected as your account (only if you have registered an account prior to January 1, 2020)
-   * The server may accidentally log you off your username after you connect; if it says you are a "guest", you must re-login: "`/login <USERNAME>`"
-
-[![.img/step06b.png](.img/step06b.png)](#nolink)
+* Make cloud instances and share your Craft server to the world!
+   * WARNING: You must secure your server before exposing it to the public internet: [https://www.upguard.com/blog/10-essential-steps-for-configuring-a-new-server](https://www.upguard.com/blog/10-essential-steps-for-configuring-a-new-server)
 
 [Back to Top](#table-of-contents)
 
@@ -596,6 +559,42 @@ If you **do not** have access to your network's router but have USB and HDMI ada
       * If the Pi did not successfully connect to your network, there will not be an IP address shown
 
    [![.img/te.png](.img/te.png)](#nolink)
+
+[Back to Top](#table-of-contents)
+
+--------------------------------------------------------------------------------------------------
+
+## DEFUNCT: Registering a Craft Account
+
+**We have bypassed this requirement by modifying the `server.py` file in step [5.4. Modify Craft server program](#54-modify-craft-server-program)**
+
+* **NOTICE: You cannot register a new Craft account at this time (Jan. 1, 2020)**
+* You can still still log onto your server as a "guest"
+* Even though we made our own sever here, we still need to register an account on the creator of Craft's website: https://craft.michaelfogleman.com/
+
+> "Why register?
+>
+> You can play on most game servers anonymously. **However, without registering you will not be able to make changes in most areas of the world**."
+
+* After you register and verify your email address, log back into https://craft.michaelfogleman.com/ and make an Identity Token, it should look similar to:
+
+```
+/identity <USERNAME> 0123456789abcdef0123456789abcdef
+```
+
+[![.img/step06a.png](.img/step06a.png)](#nolink)
+
+* **Highlight the line and `CTRL`+`C`** (pressing the copy to clipboard button didn't work for me to paste in the game)
+* NOTE: You can only see this key once; if you close this window, you will have to make another key if you need it again
+
+### Connecting to Craft server
+
+* Once the game starts, press "`T`" and `CTRL`+`V` to paste in your Identity Token and press ENTER (slash "`/`" in front is used to denote system commands)
+* Press "`T`" and enter "`/online <SERVER IP>`" to connect to your Raspberry Pi Zero Craft server
+   * Once on the server, you should automatically be connected as your account (only if you have registered an account prior to January 1, 2020)
+   * The server may accidentally log you off your username after you connect; if it says you are a "guest", you must re-login: "`/login <USERNAME>`"
+
+[![.img/step06b.png](.img/step06b.png)](#nolink)
 
 [Back to Top](#table-of-contents)
 
