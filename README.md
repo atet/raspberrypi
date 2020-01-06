@@ -60,7 +60,7 @@
    * You will also need:
    1. Cell phone charger (5V) with micro USB cable
    2. MicroSD card (≥8 GB)
-* NOTE: There exists an older model, the Raspberry Pi Zero (without the "W"), that **does not include WiFi capability required for this tutorial**
+* NOTE: The older model Raspberry Pi Zero (without the "W") **does not include WiFi capability required for this tutorial**
 
 > [![.img/step00b.png](.img/step00b.png)](#nolink)
 > 
@@ -76,7 +76,7 @@
 * Connect to WiFi using only the network name (a.k.a. SSID) and password
    * Some networks may require additional registration for new devices, like a school or public hotspot; consult your IT department about adding your Pi
 * Disabled ["wireless isolation" (a.k.a. AP isolation, station isolation, or client isolation)](https://www.howtogeek.com/179089/lock-down-your-wi-fi-network-with-your-routers-wireless-isolation-option/)
-   * There is no compromise on this one; if wireless isolation is not disabled on your network, you will not be able to connect to your Pi trhough WiFi
+   * There is no compromise on this one; if wireless isolation is not disabled on your network, you will not be able to connect to your Pi through WiFi
 
 **Once you have everything here, you're ready to go!**
 
@@ -112,7 +112,7 @@
 
 ### 2.2. Burn OS Image on Micro SD Card
 
-* Download Rufus Portable v3.8: [https://rufus.ie/](https://rufus.ie/)
+* Download and run Rufus Portable v3.8: [https://rufus.ie/](https://rufus.ie/)
 * Select your micro SD card as the device
 * Choose the Raspbian ZIP image and `START` the burn
    * Coffee Break: This will take ~10 mins and you don't need to babysit
@@ -205,11 +205,13 @@ network={
 ### 3.1. Determining the IP address of your headless Raspberry Pi
 
 * Press the Windows key and search for "command" and open **Command Prompt**
-* In Command Prompt, execute "`ping -f raspberrypi.local`", this will give you the IP address that the Pi connected as:
+* In Command Prompt, execute "`ping -f raspberrypi.local`"
    * This operation will not work in WSL Bash, only Windows Command Prompt
-   * If the above fails or you are not using Windows, see: [Advanced Connection Methods for Headless Raspberry Pi](#advanced-connection-methods-for-headless-raspberry-pi)
+* This will give you the **IP address** that the Pi connected as (write this down):
 
 [![.img/step031a.png](.img/step031a.png)](#nolink)
+
+* If this method to get the IP address fails or you are not using Windows, see: [Advanced Connection Methods for Headless Raspberry Pi](#advanced-connection-methods-for-headless-raspberry-pi)
 
 ### 3.2. Remote connection to Raspberry Pi
 
@@ -354,14 +356,21 @@ $ cd ~/Craft && nano server.py
 ### 5.5. Start Craft server program
 
 * The Craft server program must be actively running to host a multiplayer world for users (clients) to log into
-* Once you execute the line below, the server program will start running and display events as they happen in the game world (players connecting, players logging out, etc.)
+* The server program will start running when you execute the line below and **initially look blank** (no text cursor)
 
 ```
 $ cd ~/Craft && \
   python server.py
 ```
 
-* Remember the IP address for the Pi, **this IP is the address that clients will connect to** within your local area network (LAN)
+[![.img/step05b.png](.img/step05b.png)](#nolink)
+
+
+* Events will only display as they happen in the game world (players connecting, players logging out, etc.)
+
+[![.img/step05c.png](.img/step05c.png)](#nolink)
+
+* Remember the IP address for the Pi from step 3.1: **This IP is the address that clients will connect to**
 * With the Craft server program running, move on to the next section
 
 [Back to Top](#table-of-contents)
@@ -372,13 +381,15 @@ $ cd ~/Craft && \
 
 ### 6.1. Download Craft client program
 
-* Download the Craft client for Windows or MacOS here: https://www.michaelfogleman.com/projects/craft/
-   * This is a "portable" program (nothing needs to be installed), just extract the ZIP file
+* Download and extract the ZIP file of the Craft client for Windows or MacOS here: https://www.michaelfogleman.com/projects/craft/
 * Run `craft.exe`
 
 ### 6.2. Connecting to Craft server
 
-* Once the game starts, press "`T`" and enter "`/online <PI'S IP ADDRESS>`" to connect to your Craft multiplayer server
+**Recall the IP address that you used to connect to your Pi server from step 3.1**
+
+* Once the game starts, bring up the in-game console by pressing "`T`"
+* Enter "`/online <PI'S IP ADDRESS>`" to connect to your Craft multiplayer server
 
 [![.img/step06ba.png](.img/step06ba.png)](#nolink)
 
@@ -390,7 +401,7 @@ $ cd ~/Craft && \
 
 Button | Action
 --- | ---
-`W`, `A`, `S`, `D` | Movement
+`W`, `A`, `S`, `D` | Movement (Up, Left, Down, Right)
 `Left-Mouse` | Destroy block
 `Right-Mouse` | Create block
 `Mouse-Wheel` | Cycle through block types
@@ -407,10 +418,8 @@ More controls | https://github.com/fogleman/Craft#controls
 [![.img/step06c.png](.img/step06c.png)](#nolink)
 
 
-* **Switch back to single-player mode from multiplayer** by pressing "`T`" and enter "`/offline`"
-* You can have a single-player experience in Craft without connecting to a server and have your world saved locally on your computer
+* **Switch back to single-player mode from multiplayer** by pressing "`T`" and entering "`/offline`"
 * Other players will not be able to connect to your single-player mode world
-
 
 ### 6.5. Cleanup
 
