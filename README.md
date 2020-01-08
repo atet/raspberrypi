@@ -4,7 +4,7 @@
 
 # Introduction to Raspberry Pi
 
-**Estimated time to completion: 15 minutes**<br>(excluding waiting times for downloads and updates)
+**Estimated time to completion: 15 minutes**<br>(excludes waiting times for downloads, updates, etc.)
 
 * This introduction to Raspberry Pi only covers what's absolutely necessary to get you up and running
 * You are here because **you want to experience a realistic use case for inexpensive single board computers (SBC) while learning fundamental IT skills**
@@ -161,6 +161,8 @@ network={
 }
 ```
 
+**`wpa_supplicant.conf` file**
+
 * Copy and paste the above, changing "`ssid`" and "`psk`" to match your network's name and password and save
 * **If your WiFi network is hidden**, you must use the line "`scan_ssid=1`"
 
@@ -249,45 +251,37 @@ $ sudo nano /etc/apt/sources.list
 
 [![.img/step04a.png](.img/step04a.png)](#nolink)
 
-* After changing the above file, run "`sudo apt-get update`"
+* After changing the above file, run "`sudo apt update`"
 * The command should run successfully like this:
 
 ```
-pi@raspberrypi:~ $ sudo apt-get update
-Get:1 http://archive.raspberrypi.org/debian buster InRelease [25.2 kB]
-Get:2 http://raspbian.raspberrypi.org/raspbian buster InRelease [15.0 kB]
-Get:3 http://archive.raspberrypi.org/debian buster/main armhf Packages [260 kB]
-Get:4 http://raspbian.raspberrypi.org/raspbian buster/rpi Sources [1,132 B]
-Get:5 http://raspbian.raspberrypi.org/raspbian buster/main Sources [11.4 MB]
-Get:6 http://raspbian.raspberrypi.org/raspbian buster/contrib Sources [78.5 kB]
-Get:7 http://raspbian.raspberrypi.org/raspbian buster/non-free Sources [139 kB]
+pi@raspberrypi:~ $ sudo apt update
+Get:1 http://raspbian.raspberrypi.org/raspbian buster InRelease [15.0 kB]
+Get:2 http://archive.raspberrypi.org/debian buster InRelease [25.2 kB]
+Get:3 http://raspbian.raspberrypi.org/raspbian buster/rpi Sources [1,132 B]
+Get:4 http://raspbian.raspberrypi.org/raspbian buster/contrib Sources [78.5 kB]
+Get:5 http://archive.raspberrypi.org/debian buster/main armhf Packages [260 kB]
+Get:6 http://raspbian.raspberrypi.org/raspbian buster/non-free Sources [139 kB]
+Get:7 http://raspbian.raspberrypi.org/raspbian buster/main Sources [11.4 MB]
 Get:8 http://raspbian.raspberrypi.org/raspbian buster/main armhf Packages [13.0 MB]
-Fetched 24.9 MB in 53s (473 kB/s)
+Fetched 24.9 MB in 56s (441 kB/s)
 Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+64 packages can be upgraded. Run 'apt list --upgradable' to see them.
 pi@raspberrypi:~ $ _
 ```
 
-* **IMPORTANT**: You must rerun "`sudo apt-get update`" if you see any issues like:
+* **IMPORTANT**: You must rerun "`sudo apt update`" if you see any issues like:
 
-```
-1: Network is unreachable) [IP: 93.93.128.193 80]
-E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?
-pi@raspberrypi:~ $ _
-```
+   ```
+   1: Network is unreachable) [IP: 93.93.128.193 80]
+   E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?
+   pi@raspberrypi:~ $ _
+   ```
 
 * If this error keeps occuring, the update servers may be having issues; try again later
 * **This command must run successfully before continuing this tutorial**
-
-### 4.2. Update to latest version
-
-* Copy and paste the entire multi-line command after the "`$`" and press ENTER:
-   * It's best practice to re-run "`sudo apt-get update`" everytime you're about to install anything new
-   * Coffee break #3: This will take ~20 mins. and you don't need to babysit this
-
-```
-$ sudo apt-get update && \
-  sudo apt-get -y upgrade
-```
 
 [Back to Top](#table-of-contents)
 
@@ -299,23 +293,22 @@ $ sudo apt-get update && \
 
 * We need to install a few new programs that the Craft server program is dependent on (a.k.a. dependencies)
 * Copy and paste the entire multi-line command after the "`$`" and press ENTER:
-   * Coffee break #4: This will take 10+ mins. and you don't need to babysit this
+   * Coffee break #3: This will take ~15 mins. and you don't need to babysit this
 
 ```
-$ sudo apt-get -y install git python-pip cmake libglew-dev \
+$ sudo apt install -y git python-pip cmake libglew-dev \
   xorg-dev libcurl4-openssl-dev && \
-  sudo apt-get -y build-dep glfw && \
+  sudo apt -y build-dep glfw && \
   python -m pip install requests
 ```
 
 * **IMPORTANT**: If there are issues in the next few steps, you may have to re-run each line from above one-by-one and confirm they executed successfully:
 
    ```
-   $ sudo apt-get update
-   $ sudo apt-get -y upgrade
-   $ sudo apt-get -y install git python-pip cmake libglew-dev \
+   $ sudo apt update
+   $ sudo apt install -y git python-pip cmake libglew-dev \
      xorg-dev libcurl4-openssl-dev
-   $ sudo apt-get -y build-dep glfw
+   $ sudo apt -y build-dep glfw
    $ python -m pip install requests
    ```
 
@@ -331,8 +324,9 @@ $ cd ~ && \
 ### 5.3. Build Craft server program
 
 * Build the Craft program to run on the Raspberry Pi Zero W
-   * Coffee break #5: This will take ~10 mins. and you don't need to babysit this
+   * Coffee break #4: This will take ~15 mins. and you don't need to babysit this
    * There may be some warnings, but the program should build correctly if everything from step 4.2. was successful
+   * **IMPORTANT**: If you don't see the terminal going back to "pi@raspberrypi:~/Craft $ _" the screen may be "stuck", just click on the terminal and press Enter a couple times
 
 ```
 $ cd ~/Craft && \
@@ -494,6 +488,7 @@ Cannot find Pi's IP address | _Did the Pi actually connect to your WiFi network 
 `WARNING: REMOTE HOST IDENTIFICATION...` | This means another computer had this same IP address; if this is not an issue, follow the directions given on-screen
 The wrong text is pasting in terminal | Copying and pasting into terminal is an art: Once you copy something, you must make sure you don't accidentally copy something else in the terminal before you right-click paste (e.g. blank space, different text, etc.)
 `git` will not download the Craft files | `git` will not download files if there is already a directory with the name "`Craft`", if you previously performed the `git` step and needed to redo it, you must first delete the existing "`Craft`" directory with:<br><br>`$ rm -rf ~/Craft`
+Building seems to be frozen or hanging | Click on the terminal and press Enter a couple times, if that doesn't work, you may have to wait a while longer
 Craft client crashes/closes when attempting to log into multiplayer server | Craft server program must be running on the Raspberry Pi server; confirm correct IP address typed and try again
 Player camera slowly looks up automatically | Bug when game is maximized to fullscreen; just play windowed if this happens or rebuild from scratch: https://github.com/fogleman/Craft/issues?utf8=%E2%9C%93&q=cursor
 "`Only logged in users are allowed to build`": Cannot make changes to multiplayer world | In order to make changes to your multiplayer world, you must register for a free Craft account on the author's website, see: [DEFUNCT: Registering a Craft Account](#defunct-registering-a-craft-account)
