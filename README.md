@@ -41,22 +41,23 @@
 
 ### Software
 
-* Windows: This tutorial was developed on Microsoft Windows 10 with Windows Subsystem for Linux (WSL)
-   * **You must install WSL** so Windows can communicate with Linux on the Raspberry Pi
-   * WSL is a fully supported Microsoft product for Windows 10; learn how to install it here: [https://docs.microsoft.com/en-us/windows/wsl/install-win10](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
-   * Use "Ubuntu 18.04 LTS" distribution
-   * This may take 10+ minutes and require a reboot
+We will use a Linux a CLI available on all major operating systems
 
-> [![.img/step00a.png](.img/step00a.png)](#nolink)
-> 
-> Downloading Ubuntu 18.04 LTS from Microsoft App Store
+#### Windows 10
 
-* MacOS: [Your Terminal program is Bash](https://en.wikipedia.org/wiki/Terminal_(macOS))
-* Linux: I recommend Ubuntu 18.04 LTS
+* Windows Subsystem for Linux (WSL) is a fully supported Microsoft product for Windows 10, learn how to install it here: https://github.com/atet/wsl
 
-### Computer Hardware
+#### MacOS
 
-* This tutorial uses the $10 Raspberry Pi Zero W ("wireless")
+* You do not need to install anything, [your Terminal program is Bash](https://en.wikipedia.org/wiki/Terminal_(macOS))
+
+#### Linux
+
+* I recommend using Ubuntu 20.04 LTS
+
+### Hardware
+
+* This tutorial uses the $10 Raspberry Pi Zero W ("wireless") computer
    * You will also need:
    1. Cell phone charger (5V) with micro USB cable
    2. MicroSD card (≥8 GB)
