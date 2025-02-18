@@ -1,4 +1,4 @@
-# [atet](https://github.com/atet) / [learn](https://github.com/atet/learn/blob/master/README.md#atet--learn) / [**_raspberrypi_**](https://github.com/atet/learn/blob/master/raspberrypi/README.md#atet--learn--raspberrypi)
+# [atet](https://github.com/atet) / [**_raspberrypi_**](https://github.com/atet/raspberrypi?tab=readme-ov-file#atet--raspberrypi)
 
 [![.img/logo_raspberrypi.png](.img/logo_raspberrypi.png)](#nolink)
 
@@ -442,7 +442,7 @@ $ sudo shutdown -h now
 
 * Try this tutorial one more time to solidify these concepts
 * Have other people join in at your home local area network (LAN)
-* **I highly recommend continuing with another mini project: [Atet's 15 Minute Introduction to Network Attached Storage](https://github.com/atet/learn/blob/master/nas/README.md#atet--learn--nas)**
+* **I highly recommend continuing with another mini project: [Atet's 15 Minute Introduction to Network Attached Storage](https://github.com/atet/nas?tab=readme-ov-file#atet--nas)**
 * Make cloud instances and share your Craft server to the world!
    * WARNING: You must secure your server before exposing it to the public internet: [https://www.upguard.com/blog/10-essential-steps-for-configuring-a-new-server](https://www.upguard.com/blog/10-essential-steps-for-configuring-a-new-server)
 
